@@ -1,8 +1,22 @@
+import Hero from "./Hero";
+import WhatWeDo from "./WhatWeDo";
+import OurServices from "./OurServices";
+import WhoWeWorkWith from "./WhoWeWorkWith";
+import OurFounder from "./OurFounder";
+import Testimonials from "./Testimonials";
+import FAQ from "./FAQ";
+
 function HomePage() {
     return (
-        <div>
-            <h1>Home</h1>
-        </div>
+        <>
+            <Hero />
+            <WhatWeDo />
+            <OurServices />
+            <WhoWeWorkWith />
+            <OurFounder />
+            <Testimonials />
+            <FAQ />
+        </>
     );
 }
 
