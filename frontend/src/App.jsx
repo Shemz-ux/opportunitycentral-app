@@ -3,6 +3,7 @@ import './App.css'
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/Home/HomePage';
+import AboutPage from './pages/About/AboutPage';
 
 function App() {
   const Layout = ({children}) => {
@@ -22,7 +23,7 @@ function App() {
     },
     { 
       path: "/about",
-      element: <Layout><div>About</div></Layout>
+      element: <Layout><AboutPage /></Layout>
     },
     { 
       path: "/services",
