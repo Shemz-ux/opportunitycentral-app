@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/Home/HomePage';
 import AboutPage from './pages/About/AboutPage';
+import ServicesPage from './pages/Services/ServicesPage';
 
 function App() {
   const Layout = ({children}) => {
@@ -27,7 +28,7 @@ function App() {
     },
     { 
       path: "/services",
-      element: <Layout><div>Services</div></Layout>
+      element: <Layout><ServicesPage /></Layout>
     },
     { 
       path: "/blog",

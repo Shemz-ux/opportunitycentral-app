@@ -25,7 +25,7 @@ function Footer() {
                 className="flex-1 px-6 py-4 bg-white/10 border border-white/20 rounded-full text-white placeholder:text-gray-500 focus:outline-none focus:border-white/40"
               />
 
-              <button to="/newsletter" className="px-8 py-4 bg-white text-[#0A0A0A] rounded-full hover:bg-gray-100 transition-colors">
+              <button to="/newsletter" className="px-8 py-4 bg-white text-[#0A0A0A] rounded-full hover:bg-gray-100 transition-colors cursor-pointer">
                 Subscribe
               </button>
               {/* TODO: Add newsletter subscription functionality + success when submitted */}
