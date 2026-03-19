@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import HomePage from './pages/Home/HomePage';
 import AboutPage from './pages/About/AboutPage';
 import ServicesPage from './pages/Services/ServicesPage';
+import BlogPage from './pages/Blog/BlogPage';
+import BlogPost from './pages/Blog/BlogPost';
 
 function App() {
   const Layout = ({children}) => {
@@ -32,7 +34,11 @@ function App() {
     },
     { 
       path: "/blog",
-      element: <Layout><div>blog</div></Layout>
+      element: <Layout><BlogPage /></Layout>
+    },
+    {
+      path: "/blog/:slug",
+      element: <Layout><BlogPost /></Layout>
     },
     { 
       path: "/contact",
