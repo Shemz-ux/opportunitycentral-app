@@ -38,7 +38,7 @@ function WhoWeWorkWith() {
             <h2 className="text-[40px] md:text-[48px] leading-[1.1] font-light text-[#0A0A0A] mb-4">
               Who do we
               <br />
-              <span className="font-normal">Work with</span>
+              <span className="font-light text-[#9CA3AF]">work</span> with
             </h2>
             <p className="text-base text-[#6B7280] max-w-xl leading-relaxed">
               Our commitment to talent development extends across sectors.

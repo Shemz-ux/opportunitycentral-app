@@ -29,19 +29,19 @@ function WhatWeDo() {
 
         {/* Stats/Cards Grid */}
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-[#F9FAFB] rounded-2xl p-10">
+          <div className="bg-[#F9FAFB] rounded-2xl p-10 border border-transparent hover:border-[#E5E7EB] hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
             <div className="text-[56px] font-light text-[#0A0A0A] leading-none mb-4">500+</div>
             <p className="text-base text-[#6B7280] leading-relaxed">
               Total Revenue We Get From Various Projects Or Clients That We Complete
             </p>
           </div>
-          <div className="bg-[#F9FAFB] rounded-2xl p-10">
+          <div className="bg-[#F9FAFB] rounded-2xl p-10 border border-transparent hover:border-[#E5E7EB] hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
             <div className="text-[56px] font-light text-[#0A0A0A] leading-none mb-4">15K+</div>
             <p className="text-base text-[#6B7280] leading-relaxed">
               The Beauty Of Nature, Creating A Timeless Escape Where Tranquility
             </p>
           </div>
-          <div className="bg-[#F9FAFB] rounded-2xl p-10">
+          <div className="bg-[#F9FAFB] rounded-2xl p-10 border border-transparent hover:border-[#E5E7EB] hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
             <div className="text-[56px] font-light text-[#0A0A0A] leading-none mb-4">98%</div>
             <p className="text-base text-[#6B7280] leading-relaxed">
               Total Revenue We Get From Various Projects Or Clients That We Complete

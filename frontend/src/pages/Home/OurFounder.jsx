@@ -35,9 +35,9 @@ function OurFounder() {
         {/* Centered Heading */}
         <div className="text-center mb-16">
           <h2 className="text-[40px] md:text-[48px] leading-[1.2] font-light text-[#0A0A0A]">
-            Hear Directly From
+            Hear directly from
             <br />
-            <span className="font-normal">Our Founder</span>
+            <span className="font-light text-[#9CA3AF]">our founder</span>
           </h2>
         </div>
 

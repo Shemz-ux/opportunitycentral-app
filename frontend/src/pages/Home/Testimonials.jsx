@@ -62,22 +62,24 @@ function Testimonials() {
   return (
     <section className="bg-white py-24">
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="flex items-start justify-between mb-14">
-          <div>
-            <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-4">
-              Our Reviews
-            </p>
-            <h2 className="text-[40px] md:text-[48px] leading-[1.1] font-light text-[#0A0A0A]">
-              What Our <span className="text-[#9CA3AF]">Clients</span> Say
-            </h2>
-          </div>
-          <div className="flex items-center gap-3 mt-4">
-            <button onClick={prev} className="w-10 h-10 rounded-full bg-[#0A0A0A] flex items-center justify-center hover:opacity-80 transition-opacity" aria-label="Previous testimonial">
-              <ChevronLeft className="w-4 h-4 text-white" />
-            </button>
-            <button onClick={next} className="w-10 h-10 rounded-full bg-[#0A0A0A] flex items-center justify-center hover:opacity-80 transition-opacity" aria-label="Next testimonial">
-              <ChevronRight className="w-4 h-4 text-white" />
-            </button>
+        <div className="mb-14">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between">
+            <div>
+              <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-4">
+                Our Reviews
+              </p>
+              <h2 className="text-[40px] md:text-[48px] leading-[1.1] font-light text-[#0A0A0A]">
+                What our <span className="text-[#9CA3AF]">clients</span> say
+              </h2>
+            </div>
+            <div className="flex items-center gap-3 mt-6 md:mt-10">
+              <button onClick={prev} className="w-10 h-10 rounded-full bg-[#0A0A0A] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer" aria-label="Previous testimonial">
+                <ChevronLeft className="w-4 h-4 text-white" />
+              </button>
+              <button onClick={next} className="w-10 h-10 rounded-full bg-[#0A0A0A] flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer" aria-label="Next testimonial">
+                <ChevronRight className="w-4 h-4 text-white" />
+              </button>
+            </div>
           </div>
         </div>
 
