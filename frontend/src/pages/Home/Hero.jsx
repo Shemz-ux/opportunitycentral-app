@@ -27,8 +27,9 @@ function Hero() {
                         Get Started
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <Link to="/services" className="px-8 py-4 border border-[#0A0A0A] rounded-full text-sm text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white transition-colors">
-                        Our Services
+                    <Link to="/services" className="px-8 py-4 border border-[#0A0A0A] rounded-full text-sm text-[#0A0A0A] hover:text-white transition-colors relative overflow-hidden group">
+                        <span className="absolute inset-0 bg-[#0A0A0A] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
+                        <span className="relative z-10">Our Services</span>
                     </Link>
                     </div>
 

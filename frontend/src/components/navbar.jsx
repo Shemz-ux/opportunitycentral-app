@@ -47,10 +47,11 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           <Link
             to="/contact"
-            className="hidden md:flex items-center gap-2 px-5 py-2 border border-[#0A0A0A] rounded-full text-sm text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white transition-colors"
+            className="hidden md:flex items-center gap-2 px-5 py-2 border border-[#0A0A0A] rounded-full text-sm text-[#0A0A0A] hover:text-white transition-colors relative overflow-hidden group"
           >
-            <User className="w-4 h-4" />
-            Get In Touch
+            <span className="absolute inset-0 bg-[#0A0A0A] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
+            <User className="w-4 h-4 relative z-10" />
+            <span className="relative z-10">Get In Touch</span>
           </Link>
           <button
             className="md:hidden p-2"

@@ -7,6 +7,7 @@ import AboutPage from './pages/About/AboutPage';
 import ServicesPage from './pages/Services/ServicesPage';
 import BlogPage from './pages/Blog/BlogPage';
 import BlogPost from './pages/Blog/BlogPost';
+import ContactPage from './pages/Contact/ContactPage';
 
 function App() {
   const Layout = ({children}) => {
@@ -42,7 +43,7 @@ function App() {
     },
     { 
       path: "/contact",
-      element: <Layout><div>contact</div></Layout>
+      element: <Layout><ContactPage /></Layout>
     }
   ]);
 
