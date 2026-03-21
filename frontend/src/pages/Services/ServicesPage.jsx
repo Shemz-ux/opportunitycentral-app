@@ -1,5 +1,6 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 const services = [
   {
@@ -84,10 +85,25 @@ const process = [
 ];
 
 function ServicesPage() {
+  const [heroRef, heroVisible] = useFadeIn({ threshold: 0.2 });
+  const [featuredRef, featuredVisible] = useFadeIn({ threshold: 0.2 });
+  const [service1Ref, service1Visible] = useFadeIn({ threshold: 0.2 });
+  const [service2Ref, service2Visible] = useFadeIn({ threshold: 0.2 });
+  const [service3Ref, service3Visible] = useFadeIn({ threshold: 0.2 });
+  const [service4Ref, service4Visible] = useFadeIn({ threshold: 0.2 });
+  const [processRef, processVisible] = useFadeIn({ threshold: 0.2 });
+  const [ctaRef, ctaVisible] = useFadeIn({ threshold: 0.2 });
+
+  const serviceRefs = [service1Ref, service2Ref, service3Ref, service4Ref];
+  const serviceVisibles = [service1Visible, service2Visible, service3Visible, service4Visible];
+
   return (
     <>
       <section className="bg-white pt-24 pb-16">
-        <div className="max-w-[1400px] mx-auto px-8">
+        <div
+          ref={heroRef}
+          className={`max-w-[1400px] mx-auto px-8 transition-all duration-1000 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-6">What We Offer</p>
           <h1 className="text-[48px] md:text-[64px] leading-[1.05] text-[#0A0A0A] max-w-4xl mb-8">
             <span className="font-light">Services built </span>
@@ -101,7 +117,10 @@ function ServicesPage() {
 
       <section className="bg-white pb-8">
         <div className="max-w-[1400px] mx-auto px-8">
-          <div className="relative rounded-3xl overflow-hidden h-[420px] md:h-[480px]">
+          <div
+            ref={featuredRef}
+            className={`relative rounded-3xl overflow-hidden h-[420px] md:h-[480px] transition-all duration-1000 ${featuredVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             <img src="https://images.unsplash.com/photo-1761933799610-c9a75f115794?w=1400&h=600&fit=crop" alt="Executive coaching" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/90 via-[#0A0A0A]/50 to-transparent" />
             <div className="absolute inset-0 flex items-end p-10 md:p-14">
@@ -122,7 +141,11 @@ function ServicesPage() {
       <section className="py-20 bg-white">
         <div className="max-w-[1400px] mx-auto px-8 space-y-28">
           {services.map((service, i) => (
-            <div key={service.num} className="grid lg:grid-cols-2 gap-16 items-center">
+            <div
+              key={service.num}
+              ref={serviceRefs[i]}
+              className={`grid lg:grid-cols-2 gap-16 items-center transition-all duration-1000 ${serviceVisibles[i] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            >
               <div className={i % 2 !== 0 ? "lg:order-2" : "lg:order-1"}>
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 group">
                   <img src={service.image} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -151,7 +174,10 @@ function ServicesPage() {
       </section>
 
       <section className="py-24 bg-[#F9FAFB]">
-        <div className="max-w-[1400px] mx-auto px-8">
+        <div
+          ref={processRef}
+          className={`max-w-[1400px] mx-auto px-8 transition-all duration-1000 ${processVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div className="text-center mb-16">
             <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-3">How We Work</p>
             <h2 className="text-[36px] md:text-[42px] leading-[1.15] font-light text-[#0A0A0A]">Our Process</h2>
@@ -172,7 +198,10 @@ function ServicesPage() {
 
       <section className="py-20 bg-white">
         <div className="max-w-[1400px] mx-auto px-8">
-          <div className="bg-[#F9FAFB] rounded-3xl p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div
+            ref={ctaRef}
+            className={`bg-[#F9FAFB] rounded-3xl p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 transition-all duration-1000 ${ctaVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             <div>
               <h2 className="text-[32px] md:text-[40px] leading-[1.1] text-[#0A0A0A] mb-3">
                 <span className="font-light">Let's build something </span>

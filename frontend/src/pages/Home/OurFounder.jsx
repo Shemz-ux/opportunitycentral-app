@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 const founderTestimonials = [
   {
@@ -23,6 +24,8 @@ const founderTestimonials = [
 function OurFounder() {
   const [current, setCurrent] = useState(0);
   const testimonial = founderTestimonials[current];
+  const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
+  const [contentRef, contentVisible] = useFadeIn({ threshold: 0.2 });
 
   const prev = () =>
     setCurrent((c) => (c === 0 ? founderTestimonials.length - 1 : c - 1));
@@ -33,7 +36,10 @@ function OurFounder() {
     <section className="bg-white py-24">
       <div className="max-w-[1400px] mx-auto px-8">
         {/* Centered Heading */}
-        <div className="text-center mb-16">
+        <div
+          ref={headerRef}
+          className={`text-center mb-16 transition-all duration-1000 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <h2 className="text-[40px] md:text-[48px] leading-[1.2] font-light text-[#0A0A0A]">
             Hear directly from
             <br />
@@ -42,7 +48,10 @@ function OurFounder() {
         </div>
 
         {/* Split Layout */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div
+          ref={contentRef}
+          className={`grid lg:grid-cols-2 gap-16 items-start transition-all duration-1000 delay-300 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           {/* Left Column - Text */}
           <div className="flex flex-col justify-between h-full">
             <div>

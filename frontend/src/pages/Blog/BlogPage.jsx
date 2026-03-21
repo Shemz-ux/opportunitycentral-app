@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { getAllBlogs, getBlogsByCategory, getCategories } from "../../services/blogData";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
+  const [featuredRef, featuredVisible] = useFadeIn({ threshold: 0.2 });
+  const [categoriesRef, categoriesVisible] = useFadeIn({ threshold: 0.2 });
+  const [postsRef, postsVisible] = useFadeIn({ threshold: 0.2 });
 
   const filtered =
     activeCategory === "All"
@@ -17,7 +22,10 @@ function BlogPage() {
     <>
       <section className="bg-white pt-24 pb-12">
         <div className="max-w-[1400px] mx-auto px-8">
-          <div className="grid lg:grid-cols-2 gap-8 items-end">
+          <div
+            ref={headerRef}
+            className={`grid lg:grid-cols-2 gap-8 items-end transition-all duration-1000 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             <div>
               <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-4">Insights & Resources</p>
               <h1 className="text-[48px] md:text-[56px] leading-[1.05] font-light text-[#0A0A0A]">Our Blog</h1>
@@ -32,7 +40,11 @@ function BlogPage() {
       {activeCategory === "All" && (
         <section className="bg-white pb-8">
           <div className="max-w-[1400px] mx-auto px-8">
-            <Link to={`/blog/${featured.slug}`} className="block group">
+            <Link
+              to={`/blog/${featured.slug}`}
+              ref={featuredRef}
+              className={`block group transition-all duration-1000 ${featuredVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            >
               <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[480px]">
                 <img src={featured.image} alt={featured.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-[#0A0A0A]/30 to-transparent" />
@@ -54,7 +66,10 @@ function BlogPage() {
 
       <section className="bg-white py-8">
         <div className="max-w-[1400px] mx-auto px-8">
-          <div className="flex flex-wrap gap-3">
+          <div
+            ref={categoriesRef}
+            className={`flex flex-wrap gap-3 transition-all duration-1000 ${categoriesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             {getCategories().map((cat) => (
               <button
                 key={cat}
@@ -74,7 +89,10 @@ function BlogPage() {
 
       <section className="bg-white pb-24">
         <div className="max-w-[1400px] mx-auto px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+          <div
+            ref={postsRef}
+            className={`grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 transition-all duration-1000 delay-300 ${postsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             {(activeCategory === "All" ? rest : filtered).map((post, i) => (
                 // TODO: when user clicks on a post, it should increment the view count consider whether this is a good idea
               <Link key={post.slug} to={`/blog/${post.slug}`} className={`group block ${i % 3 === 1 ? "lg:mt-12" : ""}`}>

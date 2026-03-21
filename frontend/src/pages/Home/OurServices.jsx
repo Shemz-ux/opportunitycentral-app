@@ -1,11 +1,18 @@
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 function OurServices() {
+  const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
+  const [cardsRef, cardsVisible] = useFadeIn({ threshold: 0.2 });
+
   return (
     <section className="bg-white py-24">
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="mb-16">
+        <div
+          ref={headerRef}
+          className={`mb-16 transition-all duration-1000 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
             <div>
                 <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-4">
                 Our Services
@@ -21,7 +28,10 @@ function OurServices() {
             </div>
         
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div
+          ref={cardsRef}
+          className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 delay-300 ${cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div className="group">
             <div className="aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden mb-6">
               <img

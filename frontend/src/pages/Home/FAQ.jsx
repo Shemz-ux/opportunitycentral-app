@@ -1,5 +1,6 @@
 import { Plus, Minus } from "lucide-react";
 import { useState } from "react";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 const faqs = [
   {
@@ -22,6 +23,7 @@ const faqs = [
 
 function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
+  const [sectionRef, sectionVisible] = useFadeIn({ threshold: 0.2 });
 
   const toggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -30,7 +32,10 @@ function FAQ() {
   return (
     <section className="bg-white py-24">
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="grid lg:grid-cols-2 gap-20">
+        <div
+          ref={sectionRef}
+          className={`grid lg:grid-cols-2 gap-20 transition-all duration-1000 ${sectionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div>
             <div className="inline-block px-4 py-1.5 bg-[#F9FAFB] text-[#0A0A0A] text-xs rounded-full mb-8">
               Top questions answered.

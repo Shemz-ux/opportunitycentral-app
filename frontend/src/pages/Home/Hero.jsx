@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 function Hero() {
+    const [textRef, textVisible] = useFadeIn({ threshold: 0.2 });
+    const [imageRef, imageVisible] = useFadeIn({ threshold: 0.2 });
+
     return (
         <section className="bg-[#F9FAFB] pt-24 pb-32">
             <div className="max-w-[1400px] mx-auto px-8">
                 <div className="grid lg:grid-cols-2 gap-20 items-start">
                 {/* Left Column - Text & Buttons */}
-                <div>
+                <div
+                    ref={textRef}
+                    className={`transition-all duration-1000 ${textVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                >
                     <h1 className="text-[64px] leading-[1.1] mb-12">
                     <span className="font-light text-[#9CA3AF]">Discover talent</span>
                     <span className="font-light text-[#0A0A0A]"> development</span>
@@ -51,7 +58,10 @@ function Hero() {
                 </div>
 
                 {/* Right Column - Image */}
-                <div className="relative mb-12">
+                <div
+                    ref={imageRef}
+                    className={`relative mb-12 transition-all duration-1000 delay-300 ${imageVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                >
                     <div className="aspect-[4/3] bg-gray-150 rounded-2xl overflow-hidden shadow-lg">
                     <img
                         src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&h=1200&fit=crop"

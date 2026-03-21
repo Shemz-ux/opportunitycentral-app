@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 function WhatWeDo() {
+  const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
+  const [cardsRef, cardsVisible] = useFadeIn({ threshold: 0.2 });
+
   return (
     <section className="bg-white py-24">
       <div className="max-w-[1400px] mx-auto px-8">
         {/* Header Row */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start mb-20">
+        <div
+          ref={headerRef}
+          className={`grid lg:grid-cols-2 gap-16 items-start mb-20 transition-all duration-1000 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div>
             <h2 className="text-[48px] leading-[1.2]">
               <span className="font-light text-[#0A0A0A]">Work with</span>
@@ -28,7 +35,10 @@ function WhatWeDo() {
         </div>
 
         {/* Stats/Cards Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div
+          ref={cardsRef}
+          className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 delay-300 ${cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div className="bg-[#F9FAFB] rounded-2xl p-10 border border-transparent hover:border-[#E5E7EB] hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
             <div className="text-[56px] font-light text-[#0A0A0A] leading-none mb-4">500+</div>
             <p className="text-base text-[#6B7280] leading-relaxed">

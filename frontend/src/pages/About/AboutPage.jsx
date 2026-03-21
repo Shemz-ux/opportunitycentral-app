@@ -1,5 +1,6 @@
 import { ArrowRight, Target, Heart, Lightbulb, Users, Crosshair, TrendingUp, Shield } from "lucide-react";
 import { Link } from "react-router";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 const milestones = [
   { year: "2011", label: "Founded", desc: "Sarah Bergmann starts consulting independently" },
@@ -60,6 +61,13 @@ const coreFocus = [
 ];
 
 function AboutPage() {
+  const [heroRef, heroVisible] = useFadeIn({ threshold: 0.2 });
+  const [storyRef, storyVisible] = useFadeIn({ threshold: 0.2 });
+  const [milestonesRef, milestonesVisible] = useFadeIn({ threshold: 0.2 });
+  const [valuesRef, valuesVisible] = useFadeIn({ threshold: 0.2 });
+  const [focusRef, focusVisible] = useFadeIn({ threshold: 0.2 });
+  const [ctaRef, ctaVisible] = useFadeIn({ threshold: 0.2 });
+
   return (
     <>
       <section className="relative h-[70vh] min-h-[500px] flex items-end overflow-hidden">
@@ -71,7 +79,10 @@ function AboutPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-transparent" />
         </div>
-        <div className="relative max-w-[1400px] mx-auto px-8 pb-20 w-full">
+        <div
+          ref={heroRef}
+          className={`relative max-w-[1400px] mx-auto px-8 pb-20 w-full transition-all duration-1000 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <p className="text-xs tracking-[0.2em] uppercase text-white mb-4">About Us</p>
           <h1 className="text-[48px] md:text-[72px] leading-[1.05] text-white max-w-3xl">
             <span className="font-light">Built on </span>
@@ -85,7 +96,10 @@ function AboutPage() {
 
       <section className="py-24 bg-white">
         <div className="max-w-[1400px] mx-auto px-8">
-          <div className="grid lg:grid-cols-5 gap-16 items-start">
+          <div
+            ref={storyRef}
+            className={`grid lg:grid-cols-5 gap-16 items-start transition-all duration-1000 ${storyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             <div className="lg:col-span-2">
               <h2 className="text-[36px] md:text-[42px] leading-[1.15] font-light text-[#0A0A0A] mb-6">Our Story</h2>
               <div className="w-16 h-[2px] bg-[#0A0A0A]" />
@@ -100,7 +114,10 @@ function AboutPage() {
       </section>
 
       <section className="py-20 bg-[#F9FAFB]">
-        <div className="max-w-[1400px] mx-auto px-8">
+        <div
+          ref={milestonesRef}
+          className={`max-w-[1400px] mx-auto px-8 transition-all duration-1000 ${milestonesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-3">Our Journey</p>
           <h2 className="text-[36px] leading-[1.15] font-light text-[#0A0A0A] mb-14">Key Milestones</h2>
           <div className="relative">
@@ -119,7 +136,10 @@ function AboutPage() {
       </section>
 
       <section className="py-24 bg-white">
-        <div className="max-w-[1400px] mx-auto px-8">
+        <div
+          ref={valuesRef}
+          className={`max-w-[1400px] mx-auto px-8 transition-all duration-1000 ${valuesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14">
             <div>
               <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-3">What Guides Us</p>
@@ -144,7 +164,10 @@ function AboutPage() {
       </section>
 
       <section className="py-24 bg-[#F9FAFB]">
-        <div className="max-w-[1400px] mx-auto px-8">
+        <div
+          ref={focusRef}
+          className={`max-w-[1400px] mx-auto px-8 transition-all duration-1000 ${focusVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div className="text-center mb-16">
             <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-3">What Drives Us</p>
             <h2 className="text-[36px] md:text-[42px] leading-[1.15] font-light text-[#0A0A0A]">Our Core Focus</h2>
@@ -174,7 +197,10 @@ function AboutPage() {
 
       <section className="py-24 bg-white shadow-lg">
         <div className="max-w-[1400px] mx-auto px-8">
-          <div className="bg-[#F9FAFB] rounded-3xl p-12 md:p-16 text-center">
+          <div
+            ref={ctaRef}
+            className={`bg-[#F9FAFB] rounded-3xl p-12 md:p-16 text-center transition-all duration-1000 ${ctaVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             <h2 className="text-[36px] md:text-[48px] leading-[1.1] text-[#0A0A0A] mb-6">
               <span className="font-light">Ready to </span>
               <span className="font-normal">work together?</span>

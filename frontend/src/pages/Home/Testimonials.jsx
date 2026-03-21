@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 const testimonials = [
   {
@@ -48,6 +49,7 @@ const testimonials = [
 
 function Testimonials() {
   const [startIndex, setStartIndex] = useState(0);
+  const [sectionRef, sectionVisible] = useFadeIn({ threshold: 0.2 });
   const visibleCount = 3;
 
   const prev = () =>
@@ -62,7 +64,10 @@ function Testimonials() {
   return (
     <section className="bg-white py-24">
       <div className="max-w-[1400px] mx-auto px-8">
-        <div className="mb-14">
+        <div
+          ref={sectionRef}
+          className={`mb-14 transition-all duration-1000 ${sectionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div className="flex flex-col md:flex-row md:items-start md:justify-between">
             <div>
               <p className="text-xs tracking-[0.2em] uppercase text-[#9CA3AF] mb-4">

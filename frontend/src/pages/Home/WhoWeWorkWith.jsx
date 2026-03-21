@@ -1,5 +1,6 @@
 import { GraduationCap, Building2, Users, Briefcase, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
+import { useFadeIn } from "../../hooks/useFadeIn";
 
 const partners = [
   {
@@ -29,11 +30,17 @@ const partners = [
 ];
 
 function WhoWeWorkWith() {
+  const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
+  const [cardsRef, cardsVisible] = useFadeIn({ threshold: 0.2 });
+
   return (
     <section className="bg-white py-24">
       <div className="max-w-[1400px] mx-auto px-8">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14">
+        <div
+          ref={headerRef}
+          className={`flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14 transition-all duration-1000 ${headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           <div>
             <h2 className="text-[40px] md:text-[48px] leading-[1.1] font-light text-[#0A0A0A] mb-4">
               Who do we
@@ -56,7 +63,10 @@ function WhoWeWorkWith() {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div
+          ref={cardsRef}
+          className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-5 transition-all duration-1000 delay-300 ${cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+        >
           {partners.map((partner) => {
             const Icon = partner.icon;
             return (
