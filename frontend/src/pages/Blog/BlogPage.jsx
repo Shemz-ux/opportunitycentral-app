@@ -76,7 +76,7 @@ function BlogPage() {
         <div className="max-w-[1400px] mx-auto px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
             {(activeCategory === "All" ? rest : filtered).map((post, i) => (
-                // TODO: when use clicks on a post, it should increment the view count consider whether this is a good idea
+                // TODO: when user clicks on a post, it should increment the view count consider whether this is a good idea
               <Link key={post.slug} to={`/blog/${post.slug}`} className={`group block ${i % 3 === 1 ? "lg:mt-12" : ""}`}>
                 <div className="aspect-[3/2] rounded-2xl overflow-hidden bg-gray-100 mb-5">
                   <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />

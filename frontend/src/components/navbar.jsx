@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Blog", href: "/blog" },
 ];
 
-export function Navbar() {
+function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
