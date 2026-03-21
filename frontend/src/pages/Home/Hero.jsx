@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 function Hero() {
     return (
-        <section className="bg-[#F9FAFB] pt-20 pb-24">
+        <section className="bg-[#F9FAFB] pt-24 pb-32">
             <div className="max-w-[1400px] mx-auto px-8">
                 <div className="grid lg:grid-cols-2 gap-20 items-start">
                 {/* Left Column - Text & Buttons */}
@@ -34,7 +34,7 @@ function Hero() {
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-gray-200">
+                    {/* <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-gray-200">
                     <div>
                         <div className="text-4xl font-light text-[#0A0A0A] mb-2">500+</div>
                         <p className="text-sm text-[#9CA3AF]">Organizations Served</p>
@@ -47,7 +47,7 @@ function Hero() {
                         <div className="text-4xl font-light text-[#0A0A0A] mb-2">98%</div>
                         <p className="text-sm text-[#9CA3AF]">Satisfaction Rate</p>
                     </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Right Column - Image */}
