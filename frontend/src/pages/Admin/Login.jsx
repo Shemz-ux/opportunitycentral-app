@@ -23,12 +23,12 @@ function Login() {
   return (
     <section className="min-h-screen bg-[#F9FAFB] flex items-center justify-center py-6 sm:py-12">
       <div className="max-w-md w-full mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-6 sm:mb-8">
+        <div className="text-left mb-6 sm:mb-8">
           <h1 className="text-[28px] sm:text-[40px] leading-[1.2] font-light text-[#0A0A0A] mb-2">
             Admin <span className="text-[#9CA3AF]">Login</span>
           </h1>
           <p className="text-sm sm:text-base text-[#6B7280]">
-            Access the admin dashboard
+            Access to your website management dashboard!
           </p>
         </div>
 
