@@ -14,7 +14,7 @@ function DeleteConfirmModal({ isOpen, onClose, onConfirm, title, message }) {
           <X className="w-4 h-4 text-[#6B7280]" />
         </button>
 
-        <div className="flex flex-col items-center text-left">
+        <div className="flex flex-col items-center text-center">
           <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-6">
             <AlertTriangle className="w-8 h-8 text-red-500" />
           </div>
