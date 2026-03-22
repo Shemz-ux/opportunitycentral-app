@@ -5,6 +5,8 @@ import { useFadeIn } from "../../hooks/useFadeIn";
 
 function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
   const [featuredRef, featuredVisible] = useFadeIn({ threshold: 0.2 });
   const [categoriesRef, categoriesVisible] = useFadeIn({ threshold: 0.2 });
@@ -15,8 +17,30 @@ function BlogPage() {
       ? getAllBlogs()
       : getBlogsByCategory(activeCategory);
 
+  console.log(filtered);
   const featured = getAllBlogs()[0]; // TODO: Get the featured blog from the one with most clicks or the most recently posted
-  const rest = filtered.filter((p) => p.slug !== featured.slug || activeCategory !== "All");
+  
+  // For pagination, use filtered list when not "All", otherwise exclude featured post
+  const postsForPagination = activeCategory === "All" 
+    ? filtered.filter((p) => p.slug !== featured.slug)
+    : filtered;
+
+  // Pagination logic
+  const totalPages = Math.ceil(postsForPagination.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPosts = postsForPagination.slice(startIndex, endIndex);
+
+  // Reset to page 1 when category changes
+  const handleCategoryChange = (category) => {
+    setActiveCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handleItemsPerPageChange = (value) => {
+    setItemsPerPage(value);
+    setCurrentPage(1);
+  };
 
   return (
     <>
@@ -73,7 +97,7 @@ function BlogPage() {
             {getCategories().map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => handleCategoryChange(cat)}
                 className={`px-5 py-2 rounded-full text-sm transition-colors cursor-pointer ${
                   activeCategory === cat
                     ? "bg-[#0A0A0A] text-white"
@@ -89,11 +113,30 @@ function BlogPage() {
 
       <section className="bg-white pb-24">
         <div className="max-w-[1400px] mx-auto px-8">
+          {/* Items per page selector */}
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-sm text-[#6B7280]">
+              Showing {startIndex + 1}-{Math.min(endIndex, postsForPagination.length)} of {postsForPagination.length} posts
+            </p>
+            <div className="flex items-center gap-3">
+              <label className="text-sm text-[#6B7280]">Posts per page:</label>
+              <select
+                value={itemsPerPage}
+                onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                className="px-3 py-1.5 border border-[#E5E7EB] rounded-lg text-sm text-[#0A0A0A] bg-white hover:border-[#9CA3AF] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0A0A0A] focus:border-transparent"
+              >
+                <option value={9}>6</option>
+                <option value={12}>9</option>
+                <option value={18}>12</option>
+              </select>
+            </div>
+          </div>
+
           <div
             ref={postsRef}
             className={`grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 transition-all duration-1000 delay-300 ${postsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
-            {(activeCategory === "All" ? rest : filtered).map((post, i) => (
+            {currentPosts.map((post, i) => (
                 // TODO: when user clicks on a post, it should increment the view count consider whether this is a good idea
               <Link key={post.slug} to={`/blog/${post.slug}`} className={`group block ${i % 3 === 1 ? "lg:mt-12" : ""}`}>
                 <div className="aspect-[3/2] rounded-2xl overflow-hidden bg-gray-100 mb-5">
@@ -114,8 +157,57 @@ function BlogPage() {
             ))}
           </div>
 
-          {filtered.length === 0 && (
+          {postsForPagination.length === 0 && (
             <p className="text-center text-[#9CA3AF] py-20">No posts found in this category.</p>
+          )}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-16">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-[#F3F4F6] text-[#0A0A0A] hover:bg-[#E5E7EB] disabled:hover:bg-[#F3F4F6]"
+              >
+                Previous
+              </button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage = page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
+                  const showEllipsis = (page === 2 && currentPage > 3) || (page === totalPages - 1 && currentPage < totalPages - 2);
+                  
+                  if (showEllipsis) {
+                    return <span key={page} className="px-2 text-[#9CA3AF]">...</span>;
+                  }
+                  
+                  if (!showPage) return null;
+                  
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`min-w-[40px] h-10 rounded-lg text-sm font-medium transition-colors ${
+                        currentPage === page
+                          ? "bg-[#0A0A0A] text-white"
+                          : "bg-[#F3F4F6] text-[#0A0A0A] hover:bg-[#E5E7EB]"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-[#F3F4F6] text-[#0A0A0A] hover:bg-[#E5E7EB] disabled:hover:bg-[#F3F4F6]"
+              >
+                Next
+              </button>
+            </div>
           )}
         </div>
       </section>
