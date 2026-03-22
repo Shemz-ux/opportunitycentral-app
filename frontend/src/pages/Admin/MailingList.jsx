@@ -45,8 +45,8 @@ function MailingList() {
 
   const handleExport = () => {
     const csv = [
-      ["Name", "Email", "Date"],
-      ...filteredSubscribers.map(s => [s.name, s.email, s.date])
+      ["Email", "Date"],
+      ...filteredSubscribers.map(s => [s.email, s.date])
     ].map(row => row.join(",")).join("\n");
 
     const blob = new Blob([csv], { type: "text/csv" });
@@ -87,7 +87,7 @@ function MailingList() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[#E5E7EB]">
-                  <th className="text-left py-4 px-4 text-sm font-normal text-[#9CA3AF]">Name</th>
+                  {/* <th className="text-left py-4 px-4 text-sm font-normal text-[#9CA3AF]">Name</th> */}
                   <th className="text-left py-4 px-4 text-sm font-normal text-[#9CA3AF]">Email</th>
                   <th className="text-left py-4 px-4 text-sm font-normal text-[#9CA3AF]">Date Joined</th>
                   <th className="text-right py-4 px-4 text-sm font-normal text-[#9CA3AF]">Actions</th>
@@ -96,14 +96,14 @@ function MailingList() {
               <tbody>
                 {paginatedSubscribers.map((subscriber) => (
                   <tr key={subscriber.id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
-                    <td className="py-4 px-4 text-sm text-[#0A0A0A]">{subscriber.name}</td>
+                    {/* <td className="py-4 px-4 text-sm text-[#0A0A0A]">{subscriber.name}</td> */}
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
                         <Mail className="w-4 h-4 text-[#9CA3AF]" />
                         <span className="text-sm text-[#6B7280]">{subscriber.email}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-sm text-[#6B7280]">{subscriber.date}</td>
+                    <td className="py-4 px-4 text-sm text-[#6B7280]">{subscriber.dateJoined }</td>
                     <td className="py-4 px-4">
                       <div className="flex items-center justify-end gap-2">
                         <button
