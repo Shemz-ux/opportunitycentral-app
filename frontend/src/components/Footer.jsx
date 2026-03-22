@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Compass } from "lucide-react";
+import icon from '../assets/opportunitycentral-white.png';
 
 function Footer() {
   return (
@@ -36,12 +36,16 @@ function Footer() {
         {/* Footer Links */}
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center">
-                <Compass className="w-4 h-4 text-[#0A0A0A]" />
-              </div>
-              <span className="text-xl font-light">Opportunity Central</span>
-            </div>
+            <Link to="/" className="flex items-center gap-0 mb-4">
+              <img 
+                src={icon} 
+                alt="Opportunity Central" 
+                className="h-[60px] w-auto"
+              />
+              <span className="text-lg font-normal text-white tracking-tight">
+                Opportunity Central
+              </span>
+            </Link>
             <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
               Transforming talent development through innovative programs and
               strategic consulting services.

@@ -1,6 +1,7 @@
 import { User, Menu, X, Compass } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useState } from "react";
+import icon from '../assets/opportunitycentral-icon.png';
 
 const navLinks = [
   { label: "About Us", href: "/about" },
@@ -16,10 +17,12 @@ function Navbar() {
     <header className="bg-[#F9FAFB] sticky top-0 z-40">
       <div className="max-w-[1400px] mx-auto px-8 py-5 flex items-center justify-between">
         {/* Logo - Left */}
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-[#0A0A0A] rounded-lg flex items-center justify-center">
-            <Compass className="w-4.5 h-4.5 text-white" />
-          </div>
+        <Link to="/" className="flex items-center gap-0 cursor-pointer">
+          <img 
+            src={icon} 
+            alt="Opportunity Central" 
+            className="h-12 w-auto"
+          />
           <span className="text-lg font-normal text-[#0A0A0A] tracking-tight">
             Opportunity Central
           </span>
