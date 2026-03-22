@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
-import Navbar from './components/Navbar';
+import Navbar from './components/navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/Home/HomePage';
 import AboutPage from './pages/About/AboutPage';
@@ -14,14 +14,16 @@ import AdminBlogs from './pages/Admin/Blogs';
 import AdminMailingList from './pages/Admin/MailingList';
 import AdminCreateBlog from './pages/Admin/CreateBlog';
 import AdminEditBlog from './pages/Admin/EditBlog';
+import ScrollToTop from './hooks/scrollToTop';
 
 function App() {
   const Layout = ({children}) => {
     return (
       <>
-      <Navbar/>
+        <ScrollToTop />
+        <Navbar/>
         {children}
-      <Footer/>
+        <Footer/>
       </>
     )
   }
