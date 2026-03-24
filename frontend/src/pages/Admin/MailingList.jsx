@@ -45,7 +45,7 @@ function MailingList() {
 
   const handleExport = () => {
     const csv = [
-      ["Email", "Date"],
+       ["Email", "Date"],
       ...filteredSubscribers.map(s => [s.email, s.date])
     ].map(row => row.join(",")).join("\n");
 
