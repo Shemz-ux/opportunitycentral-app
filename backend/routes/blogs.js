@@ -7,18 +7,19 @@ deleteBlog,
 updateBlog, 
 incrementView 
 } = require('../controllers/blogs')
+const { authenticateToken } = require('../middleware/authenticate')
 
 const blogRouter = express.Router();
 
 blogRouter
 .route("/")
-.post(createBlog)
+.post(authenticateToken, createBlog)
 .get(getBlogs)
 
 blogRouter
 .route("/:id")
-.delete(deleteBlog)
-.patch(updateBlog)
+.delete(authenticateToken, deleteBlog)
+.patch(authenticateToken, updateBlog)
 
 blogRouter
 .route("/:slug")

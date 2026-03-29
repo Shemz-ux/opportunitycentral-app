@@ -4,16 +4,17 @@ const {
     deleteMailingListEntry, 
     getMailingList 
 } = require('../controllers/mailingList');
+const { authenticateToken } = require('../middleware/authenticate');
 
 const mailingListRouter = express.Router();
 
 mailingListRouter
     .route("/")
     .post(createMailingListEntry)
-    .get(getMailingList);
+    .get(authenticateToken, getMailingList);
 
 mailingListRouter
     .route("/:id")
-    .delete(deleteMailingListEntry);
+    .delete(authenticateToken, deleteMailingListEntry);
 
 module.exports = mailingListRouter;
