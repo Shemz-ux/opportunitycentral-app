@@ -1,5 +1,12 @@
 const express = require('express');
-const { createBlog, getBlogs, getBlogBySlug, deleteBlog, updateBlog, incrementView } = require('../controllers/blogs')
+const { 
+createBlog,
+getBlogs,
+getBlogBySlug, 
+deleteBlog, 
+updateBlog, 
+incrementView 
+} = require('../controllers/blogs')
 
 const blogRouter = express.Router();
 
