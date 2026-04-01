@@ -113,4 +113,61 @@ const loginAdmin = async (req, res) => {
     }
 };
 
-module.exports = { registerAdmin, loginAdmin, setDb };
+const updateAdmin = async (req, res) => {
+    const { email, password, name } = req.body;
+    const adminId = req.params.id;
+
+    if (!email || !password) {
+        return res.status(400).send({ message: '⚠️ Email and password are required!' });
+    }
+
+    const collection = db.collection('admins');
+
+    try {
+        // Find admin by id
+        const admin = await collection.findOne({ _id: new ObjectId(adminId) });
+        if (!admin) {
+            return res.status(404).send({ message: '⚠️ Admin not found!' });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+        // Update admin
+        await collection.updateOne(
+            { _id: new ObjectId(adminId) },
+            { $set: { email, password: hashedPassword, name } }
+        );
+
+        console.log(`✅ Admin updated: ${email}`);
+        res.status(200).send({ message: '✅ Admin updated successfully!' });
+    } catch (err) {
+        console.error('❌ UPDATE ADMIN ERROR:', err);
+        res.status(500).send({ message: '❌ Error occurred while updating admin!', error: err.message });
+    }
+};
+
+const deleteAdmin = async (req, res) => {
+    const adminId = req.params.id;
+
+    const collection = db.collection('admins');
+
+    try {
+        // Find admin by id
+        const admin = await collection.findOne({ _id: new ObjectId(adminId) });
+        if (!admin) {
+            return res.status(404).send({ message: '⚠️ Admin not found!' });
+        }
+
+        // Delete admin
+        await collection.deleteOne({ _id: new ObjectId(adminId) });
+
+        console.log(`✅ Admin deleted: ${admin.email}`);
+        res.status(200).send({ message: '✅ Admin deleted successfully!' });
+    } catch (err) {
+        console.error('❌ DELETE ADMIN ERROR:', err);
+        res.status(500).send({ message: '❌ Error occurred while deleting admin!', error: err.message });
+    }
+};
+
+module.exports = { registerAdmin, loginAdmin, updateAdmin, deleteAdmin, setDb };
