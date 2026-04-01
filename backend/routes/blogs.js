@@ -22,11 +22,11 @@ blogRouter
 .patch(authenticateToken, updateBlog)
 
 blogRouter
-.route("/:slug")
+.route("/slug/:slug")
 .get(getBlogBySlug)
 
 blogRouter
-.route("/:id/views")
+.route("/id/:id/views")
 .patch(incrementView)
 
 module.exports = blogRouter;
