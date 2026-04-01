@@ -1,0 +1,84 @@
+require('dotenv').config();
+const connection = require('../connection');
+
+const dummyBlogs = [
+    {
+        slug: "future-of-leadership-development",
+        title: "The Future of Leadership Development in a Post-Pandemic World",
+        excerpt: "How organizations are rethinking leadership training to meet the demands of hybrid work, digital transformation, and a new generation of talent.",
+        category: "Leadership",
+        date: "March 4, 2026",
+        readTime: "8 min read",
+        image: "https://images.unsplash.com/photo-1762968269894-1d7e1ce8894e?w=900&h=600&fit=crop",
+        author: "Sarah Bergmann",
+        authorRole: "Founder & CEO",
+        content: [
+            "The landscape of leadership development has shifted dramatically. What once centered on in-person retreats and classroom-style training has evolved into something far more dynamic, flexible, and human-centered.",
+            "Organizations that thrived through recent upheavals share a common trait: they invested in developing leaders who can navigate ambiguity, foster psychological safety, and lead with empathy — not just authority."
+        ],
+        isActive: true,
+        views: 0,
+        createdAt: new Date("2026-03-04"),
+        updatedAt: new Date("2026-03-04")
+    },
+    {
+        slug: "bridging-education-employment-gap",
+        title: "Bridging the Gap Between Education and Employment",
+        excerpt: "Universities are rethinking career services. Here's what the most innovative institutions are doing differently.",
+        category: "Education",
+        date: "February 18, 2026",
+        readTime: "6 min read",
+        image: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=900&h=600&fit=crop",
+        author: "David Okonkwo",
+        authorRole: "Director of Programs",
+        content: [
+            "The traditional model of career services — a small office tucked in the corner of campus, offering resume reviews and job board access — is rapidly becoming obsolete. Today's students need far more.",
+            "We've partnered with over 80 universities to reimagine career services from the ground up."
+        ],
+        isActive: true,
+        views: 0,
+        createdAt: new Date("2026-02-18"),
+        updatedAt: new Date("2026-02-18")
+    },
+    {
+        slug: "building-culture-of-continuous-learning",
+        title: "Building a Culture of Continuous Learning in Your Organization",
+        excerpt: "Why the most successful companies are shifting from annual training budgets to learning ecosystems.",
+        category: "Corporate",
+        date: "February 3, 2026",
+        readTime: "7 min read",
+        image: "https://images.unsplash.com/photo-1758691736067-b309ee3ef7b9?w=900&h=600&fit=crop",
+        author: "Sarah Bergmann",
+        authorRole: "Founder & CEO",
+        content: [
+            "The most successful companies are shifting from annual training budgets to learning ecosystems.",
+            "This transformation requires a fundamental shift in how organizations think about employee development."
+        ],
+        isActive: true,
+        views: 0,
+        createdAt: new Date("2026-02-03"),
+        updatedAt: new Date("2026-02-03")
+    }
+];
+
+const seedBlogs = async () => {
+    try {
+        const db = await connection();
+        const collection = db.collection('blogs');
+        
+        // Clear existing blogs (optional)
+        await collection.deleteMany({});
+        console.log('🗑️  Cleared existing blogs');
+        
+        // Insert dummy data
+        const result = await collection.insertMany(dummyBlogs);
+        console.log(`✅ Successfully seeded ${result.insertedCount} blogs`);
+        
+        process.exit(0);
+    } catch (err) {
+        console.error('❌ Seed error:', err);
+        process.exit(1);
+    }
+};
+
+seedBlogs();

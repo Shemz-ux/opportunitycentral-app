@@ -5,7 +5,8 @@ getBlogs,
 getBlogBySlug, 
 deleteBlog, 
 updateBlog, 
-incrementView 
+incrementView,
+getCategories 
 } = require('../controllers/blogs')
 const { authenticateToken } = require('../middleware/authenticate')
 
@@ -28,5 +29,9 @@ blogRouter
 blogRouter
 .route("/id/:id/views")
 .patch(incrementView)
+
+blogRouter
+.route("/categories")
+.get(getCategories)
 
 module.exports = blogRouter;

@@ -128,6 +128,17 @@ const getBlogBySlug = (req, res) => {
         })
 }
 
+const getCategories = (req, res) => {
+    const collection = db.collection('blogs');
+    collection.distinct('category', {})
+        .then(categories => {
+            res.status(200).send({categories})
+        })
+        .catch(err => {
+            res.status(500).send('Error occurred while fetching categories!')
+        })
+}
+
 const incrementView = (req, res) => {
     const collection = db.collection('blogs');
     const { id } = req.params;
@@ -144,4 +155,4 @@ const incrementView = (req, res) => {
         })
 }
 
-module.exports = { createBlog, deleteBlog, updateBlog, getBlogs, getBlogBySlug, incrementView, setDb };
+module.exports = { createBlog, deleteBlog, updateBlog, getBlogs, getCategories, getBlogBySlug, incrementView, setDb };
