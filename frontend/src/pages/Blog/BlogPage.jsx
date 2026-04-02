@@ -11,6 +11,7 @@ function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [categories, setCategories] = useState(["All"]);
   const [loading, setLoading] = useState(true);
+  const [categoryLoading, setCategoryLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
@@ -20,7 +21,12 @@ function BlogPage() {
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      setLoading(true);
+      // Use categoryLoading for subsequent category changes, loading for initial load
+      if (blogs.length > 0) {
+        setCategoryLoading(true);
+      } else {
+        setLoading(true);
+      }
       setError(null);
 
       try {
@@ -31,11 +37,15 @@ function BlogPage() {
         };
 
         const data = await getAllBlogs(filters);
+        
+        // Small delay for smooth transition
+        await new Promise(resolve => setTimeout(resolve, 300));
         setBlogs(data);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
+        setCategoryLoading(false);
       }
     };
 
@@ -101,8 +111,20 @@ function BlogPage() {
 
       {loading ? (
         <section className="bg-white pb-8">
-          <div className="max-w-[1400px] mx-auto px-8 text-center py-20">
-            <div className="text-lg text-[#6B7280]">Loading featured post...</div>
+          <div className="max-w-[1400px] mx-auto px-8">
+            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[480px] bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse">
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-300/50 to-transparent" />
+              <div className="absolute inset-0 flex items-end p-10 md:p-14">
+                <div className="max-w-2xl w-full space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-6 w-24 bg-white/30 rounded-full" />
+                    <div className="h-4 w-32 bg-white/20 rounded" />
+                  </div>
+                  <div className="h-10 w-3/4 bg-white/30 rounded" />
+                  <div className="h-6 w-full bg-white/20 rounded" />
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       ) : activeCategory === "All" && featured ? (
@@ -176,11 +198,30 @@ function BlogPage() {
             </div>
           </div>
 
-          <div
-            ref={postsRef}
-            className={`grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 transition-all duration-1000 delay-300 ${postsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          >
-            {currentPosts.map((post, i) => (
+          {categoryLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+              {Array.from({ length: itemsPerPage }).map((_, i) => (
+                <div key={i} className={`${i % 3 === 1 ? "lg:mt-12" : ""}`}>
+                  <div className="aspect-[3/2] rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse mb-5" />
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse" />
+                    <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                  <div className="h-6 w-3/4 bg-gray-200 rounded mb-2 animate-pulse" />
+                  <div className="h-4 w-full bg-gray-100 rounded mb-1 animate-pulse" />
+                  <div className="h-4 w-2/3 bg-gray-100 rounded animate-pulse" />
+                  <div className="flex items-center gap-2 mt-4">
+                    <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              ref={postsRef}
+              className={`grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 transition-all duration-500 ${postsVisible && !categoryLoading ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            >
+              {currentPosts.map((post, i) => (
                 // TODO: when user clicks on a post, it should increment the view count consider whether this is a good idea
               <Link key={post.slug} to={`/blog/${post.slug}`} className={`group block ${i % 3 === 1 ? "lg:mt-12" : ""}`}>
                 <div className="aspect-[3/2] rounded-2xl overflow-hidden bg-gray-100 mb-5">
@@ -198,8 +239,9 @@ function BlogPage() {
                   <span>{post.date}</span>
                 </div>
               </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {postsForPagination.length === 0 && (
             <p className="text-center text-[#9CA3AF] py-20">No posts found in this category.</p>

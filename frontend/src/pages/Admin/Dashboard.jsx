@@ -12,6 +12,7 @@ function Dashboard() {
   const [blogs, setBlogs] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const isAuth = localStorage.getItem("token");
@@ -20,6 +21,7 @@ function Dashboard() {
     }
  
     const fetchData = async () => {
+      setLoading(true);
       try {
         const blogsData = await getAllBlogs();
         setBlogs(blogsData);
@@ -29,9 +31,10 @@ function Dashboard() {
 
         const subscribersData = await getMailingList();
         setSubscribers(subscribersData);
-        console.log(subscribersData);
       } catch (err) {
         console.error("Error fetching data:", err);
+      } finally {
+        setLoading(false);
       }
     };
   
@@ -62,6 +65,47 @@ function Dashboard() {
       alert("Failed to delete subscriber. Please try again.");
     }
   };
+
+  if (loading) {
+    return (
+      <section className="min-h-screen bg-[#FFFFFF] py-6 sm:py-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-12">
+            <div className="space-y-3">
+              <div className="h-10 w-64 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-48 bg-gray-100 rounded animate-pulse" />
+            </div>
+            <div className="h-10 w-32 bg-gray-200 rounded-full animate-pulse" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white border border-[#E5E7EB] rounded-2xl p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-5 w-24 bg-gray-200 rounded animate-pulse" />
+                  <div className="w-10 h-10 bg-gray-100 rounded-full animate-pulse" />
+                </div>
+                <div className="h-8 w-16 bg-gray-200 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="bg-white border border-[#E5E7EB] rounded-2xl p-6">
+                <div className="h-6 w-32 bg-gray-200 rounded mb-6 animate-pulse" />
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }).map((_, j) => (
+                    <div key={j} className="h-16 bg-gray-100 rounded animate-pulse" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen bg-[#FFFFFF] py-6 sm:py-12">

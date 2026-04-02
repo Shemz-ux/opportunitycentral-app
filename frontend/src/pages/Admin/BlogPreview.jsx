@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Edit2, Trash2 } from "lucide-react";
+import { Edit2, Trash2, Eye } from "lucide-react";
 import Filters from "./Filters";
 import Pagination from "../../components/Pagination";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
@@ -68,18 +68,28 @@ function BlogPreview({ blogs, categories, onDelete }) {
                 <td className="py-3 px-2 text-sm text-[#6B7280]">{blog.date}</td>
                 <td className="py-3 px-2" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-end gap-1">
-                    <button
-                      onClick={() => handleDelete(blog)}
-                      className="w-7 h-7 rounded-full bg-[#F9FAFB] flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors cursor-pointer"
+                    <Link
+                      to={`/blog/${blog.slug}`}
+                      target="_blank"
+                      className="w-7 h-7 rounded-full bg-[#F9FAFB] flex items-center justify-center hover:bg-blue-50 hover:text-blue-500 transition-colors"
+                      title="View"
                     >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
+                      <Eye className="w-3 h-3" />
+                    </Link>
                     <Link
                       to={`/admin/blogs/edit/${blog.slug}`}
                       className="w-7 h-7 rounded-full bg-[#F9FAFB] flex items-center justify-center hover:bg-green-50 hover:text-green-500 transition-colors"
+                      title="Edit"
                     >
                       <Edit2 className="w-3 h-3" />
                     </Link>
+                    <button
+                      onClick={() => handleDelete(blog)}
+                      className="w-7 h-7 rounded-full bg-[#F9FAFB] flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors cursor-pointer"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
                   </div>
                 </td>
               </tr>

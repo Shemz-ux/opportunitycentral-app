@@ -16,6 +16,7 @@ function Blogs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, blog: null });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const isAuth = localStorage.getItem("token");
@@ -24,6 +25,7 @@ function Blogs() {
     }
 
     const fetchData = async () => {
+      setLoading(true);
       try {
           const blogsData = await getAllBlogs();
           setBlogs(blogsData);
@@ -32,6 +34,8 @@ function Blogs() {
           setCategories(categoriesData.filter(cat => cat !== "All"));
         } catch (err) {
           console.error("Error fetching data:", err);
+        } finally {
+          setLoading(false);
         }
       };
   
@@ -115,7 +119,35 @@ function Blogs() {
                 </tr>
               </thead>
               <tbody>
-                {paginatedBlogs.map((blog) => (
+                {loading ? (
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <tr key={i} className="border-b border-[#E5E7EB]">
+                      <td className="py-4 px-4">
+                        <div className="space-y-2">
+                          <div className="h-4 w-48 bg-gray-200 rounded animate-pulse" />
+                          <div className="h-3 w-64 bg-gray-100 rounded animate-pulse" />
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse" />
+                          <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse" />
+                          <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse" />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  paginatedBlogs.map((blog) => (
                   <tr key={blog.id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
                     <td className="py-4 px-4">
                       <div className="max-w-md">
@@ -161,7 +193,8 @@ function Blogs() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                  ))
+                )}
               </tbody>
             </table>
 

@@ -43,9 +43,45 @@ export function BlogPost() {
 
   if (loading) {
     return (
-      <section className="py-32 text-center">
-        <div className="text-xl text-[#6B7280]">Loading...</div>
-      </section>
+      <>
+        <section className="bg-white pt-8 pb-4">
+          <div className="max-w-[800px] mx-auto px-8">
+            <div className="h-8 w-32 bg-gray-200 rounded animate-pulse" />
+          </div>
+        </section>
+
+        <article className="bg-white pb-24">
+          <div className="max-w-[800px] mx-auto px-8">
+            <div className="flex flex-wrap items-center gap-4 mb-6 pt-8">
+              <div className="h-6 w-24 bg-gray-200 rounded-full animate-pulse" />
+              <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
+            </div>
+
+            <div className="h-12 w-3/4 bg-gray-200 rounded mb-6 animate-pulse" />
+
+            <div className="flex items-center gap-3 mb-10 pb-10 border-b border-[#E5E7EB]">
+              <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+              <div className="space-y-2">
+                <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+                <div className="h-3 w-24 bg-gray-100 rounded animate-pulse" />
+              </div>
+            </div>
+
+            <div className="aspect-[16/9] rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse mb-12" />
+
+            <div className="space-y-6">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+                  <div className="h-4 w-full bg-gray-100 rounded animate-pulse" />
+                  <div className="h-4 w-3/4 bg-gray-100 rounded animate-pulse" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </article>
+      </>
     );
   }
 
