@@ -159,6 +159,21 @@ export const getAllBlogs = async (filters = {}) => {
   return data.blogs;
 };
 
+export const updateBlog = async (blogId, blogData) => {
+  const data = await apiFetch(`/blogs/${blogId}`, {
+    method: "PATCH",
+    body: JSON.stringify(blogData),
+  });
+  return data;
+};
+
+export const deleteBlog = async (blogId) => {
+  const data = await apiFetch(`/blogs/${blogId}`, {
+    method: "DELETE",
+  });
+  return data;
+};
+
 export const getBlogBySlug = async (slug) => {
   const data = await apiFetch(`/blogs/slug/${slug}`);
   return data.blog;
@@ -176,3 +191,10 @@ export const getCategories = async () => {
   return data.categories;
 };
 
+export const createBlog = async (blogData) => {
+  const data = await apiFetch('/blogs', {
+    method: "POST",
+    body: JSON.stringify(blogData),
+  });
+  return data;
+};

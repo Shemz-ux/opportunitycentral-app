@@ -29,7 +29,7 @@ function BlogPreview({ blogs, categories, onDelete }) {
 
   const confirmDelete = () => {
     if (onDelete && deleteModal.blog) {
-      onDelete(deleteModal.blog.id);
+      onDelete(deleteModal.blog._id);
     }
     setDeleteModal({ isOpen: false, blog: null });
   };

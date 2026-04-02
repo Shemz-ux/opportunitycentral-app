@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus, Edit2, Trash2, Eye } from "lucide-react";
-import { getAllBlogs, getCategories } from "../../services/blogs";
+import { getAllBlogs, getCategories, deleteBlog } from "../../services/blogs";
 import Filters from "./Filters";
 import Pagination from "../../components/Pagination";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
@@ -58,9 +58,15 @@ function Blogs() {
     setDeleteModal({ isOpen: true, blog });
   };
 
-  const confirmDelete = () => {
-    setBlogs(blogs.filter((b) => b.id !== deleteModal.blog.id));
-    setDeleteModal({ isOpen: false, blog: null });
+  const confirmDelete = async () => {
+    try {
+      await deleteBlog(deleteModal.blog._id);
+      setBlogs(blogs.filter((b) => b._id !== deleteModal.blog._id));
+      setDeleteModal({ isOpen: false, blog: null });
+    } catch (err) {
+      console.error("Error deleting blog:", err);
+      alert("Failed to delete blog. Please try again.");
+    }
   };
 
   const breadcrumbItems = [

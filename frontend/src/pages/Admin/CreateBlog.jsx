@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Save, X } from "lucide-react";
-import { getCategories } from "../../services/blogs";
+import { Save, X, Plus } from "lucide-react";
+import { getCategories, createBlog } from "../../services/blogs";
 import { calculateReadTime } from "../../utils/readTime";
+import { generateSlug } from "../../utils/slugGenerator";
+import { formatContentToArray } from "../../utils/contentFormatter";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
 function CreateBlog() {
@@ -19,9 +21,12 @@ function CreateBlog() {
   });
   const [isActive, setIsActive] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("adminAuth");
+    const isAuth = localStorage.getItem("token");
     if (!isAuth) {
       navigate("/admin/login");
     }
@@ -38,23 +43,37 @@ function CreateBlog() {
     fetchCategories();
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const readTime = calculateReadTime(formData.content);
-    console.log("Creating blog:", { ...formData, readTime }, "Active:", isActive);
-    navigate("/admin/blogs");
+    setLoading(true);
+
+    try {
+      const readTime = calculateReadTime(formData.content);
+      const contentArray = formatContentToArray(formData.content);
+      
+      const blogData = {
+        ...formData,
+        content: contentArray,
+        readTime,
+        isActive,
+        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        views: 0
+      };
+
+      await createBlog(blogData);
+      navigate("/admin/blogs");
+    } catch (err) {
+      console.error("Error creating blog:", err);
+      alert("Failed to create blog. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancel = () => {
     navigate("/admin/blogs");
   };
 
-  const generateSlug = (title) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
-  };
 
   const handleTitleChange = (title) => {
     setFormData({
@@ -62,6 +81,16 @@ function CreateBlog() {
       title,
       slug: generateSlug(title),
     });
+  };
+
+  const handleAddCategory = () => {
+    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+      const updatedCategories = [...categories, newCategory.trim()];
+      setCategories(updatedCategories);
+      setFormData({ ...formData, category: newCategory.trim() });
+      setNewCategory("");
+      setShowNewCategory(false);
+    }
   };
   
   const breadcrumbItems = [
@@ -174,19 +203,56 @@ function CreateBlog() {
 
             <div>
               <label className="block text-sm text-[#0A0A0A] mb-2">Category *</label>
-              <select
-                required
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] focus:outline-none focus:border-[#0A0A0A] transition-colors cursor-pointer"
-              >
-                <option value="">Select category</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+              {!showNewCategory ? (
+                <div className="flex gap-2">
+                  <select
+                    required
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="flex-1 px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] focus:outline-none focus:border-[#0A0A0A] transition-colors cursor-pointer"
+                  >
+                    <option value="">Select category</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCategory(true)}
+                    className="px-4 py-3.5 bg-[#0A0A0A] text-white rounded-full hover:opacity-90 transition-opacity"
+                    title="Add new category"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    placeholder="Enter new category"
+                    className="flex-1 px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] placeholder:text-[#D1D5DB] focus:outline-none focus:border-[#0A0A0A] transition-colors"
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddCategory}
+                    className="px-6 py-3.5 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity"
+                  >
+                    Add
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setShowNewCategory(false); setNewCategory(""); }}
+                    className="px-6 py-3.5 border border-[#E5E7EB] text-[#0A0A0A] rounded-full text-sm hover:bg-[#F9FAFB] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
 
             {formData.content && (
@@ -213,10 +279,11 @@ function CreateBlog() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-6 sm:pt-8 border-[#E5E7EB]">
             <button
               type="submit"
-              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity"
+              disabled={loading}
+              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
-              Save Blog
+              {loading ? "Creating..." : "Save Blog"}
             </button>
             <button
               type="button"

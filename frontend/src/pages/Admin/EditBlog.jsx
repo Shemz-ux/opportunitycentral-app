@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Save, X } from "lucide-react";
-import { getBlogBySlug, getCategories } from "../../services/blogs";
+import { Save, X, Plus } from "lucide-react";
+import { getBlogBySlug, getCategories, updateBlog } from "../../services/blogs";
 import { calculateReadTime } from "../../utils/readTime";
+import { generateSlug } from "../../utils/slugGenerator";
+import { formatContentToArray } from "../../utils/contentFormatter";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
 function EditBlog() {
@@ -20,7 +22,11 @@ function EditBlog() {
   });
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
+  const [blogId, setBlogId] = useState(null);
 
   useEffect(() => {
     const isAuth = localStorage.getItem("token");
@@ -33,6 +39,7 @@ function EditBlog() {
       try {
         const blog = await getBlogBySlug(slug);
         if (blog) {
+          setBlogId(blog._id);
           setFormData({
             title: blog.title,
             slug: blog.slug,
@@ -41,7 +48,7 @@ function EditBlog() {
             image: blog.image,
             author: blog.author,
             authorRole: blog.authorRole,
-            content: blog.content.join("\n\n"),
+            content: Array.isArray(blog.content) ? blog.content.join("\n\n") : blog.content,
           });
           setIsActive(blog.isActive !== false);
         }
@@ -59,15 +66,51 @@ function EditBlog() {
     fetchData();
   }, [slug, navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const readTime = calculateReadTime(formData.content);
-    console.log("Updating blog:", { ...formData, readTime }, "Active:", isActive);
-    navigate("/admin/blogs");
+    setSaving(true);
+
+    try {
+      const readTime = calculateReadTime(formData.content);
+      const contentArray = formatContentToArray(formData.content);
+      
+      const blogData = {
+        ...formData,
+        content: contentArray,
+        readTime,
+        isActive
+      };
+
+      await updateBlog(blogId, blogData);
+      navigate("/admin/blogs");
+    } catch (err) {
+      console.error("Error updating blog:", err);
+      alert("Failed to update blog. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancel = () => {
     navigate("/admin/blogs");
+  };
+
+  const handleTitleChange = (title) => {
+    setFormData({
+      ...formData,
+      title,
+      slug: generateSlug(title),
+    });
+  };
+
+  const handleAddCategory = () => {
+    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+      const updatedCategories = [...categories, newCategory.trim()];
+      setCategories(updatedCategories);
+      setFormData({ ...formData, category: newCategory.trim() });
+      setNewCategory("");
+      setShowNewCategory(false);
+    }
   };
   
   const breadcrumbItems = [
@@ -105,7 +148,7 @@ function EditBlog() {
                   type="text"
                   required
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) => handleTitleChange(e.target.value)}
                   placeholder="Enter blog title"
                   className="w-full px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] placeholder:text-[#D1D5DB] focus:outline-none focus:border-[#0A0A0A] transition-colors"
                 />
@@ -188,19 +231,56 @@ function EditBlog() {
 
             <div>
               <label className="block text-sm text-[#0A0A0A] mb-2">Category *</label>
-              <select
-                required
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] focus:outline-none focus:border-[#0A0A0A] transition-colors cursor-pointer"
-              >
-                <option value="">Select category</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+              {!showNewCategory ? (
+                <div className="flex gap-2">
+                  <select
+                    required
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="flex-1 px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] focus:outline-none focus:border-[#0A0A0A] transition-colors cursor-pointer"
+                  >
+                    <option value="">Select category</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCategory(true)}
+                    className="px-4 py-3.5 bg-[#0A0A0A] text-white rounded-full hover:opacity-90 transition-opacity"
+                    title="Add new category"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    placeholder="Enter new category"
+                    className="flex-1 px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] placeholder:text-[#D1D5DB] focus:outline-none focus:border-[#0A0A0A] transition-colors"
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddCategory}
+                    className="px-6 py-3.5 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity"
+                  >
+                    Add
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setShowNewCategory(false); setNewCategory(""); }}
+                    className="px-6 py-3.5 border border-[#E5E7EB] text-[#0A0A0A] rounded-full text-sm hover:bg-[#F9FAFB] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
 
             {formData.content && (
@@ -227,10 +307,11 @@ function EditBlog() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-6 sm:pt-8 border-[#E5E7EB]">
             <button
               type="submit"
-              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity"
+              disabled={saving}
+              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
-              Update Blog
+              {saving ? "Updating..." : "Update Blog"}
             </button>
             <button
               type="button"

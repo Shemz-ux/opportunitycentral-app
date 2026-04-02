@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FileText, Users, Eye, Plus, LogOut, TrendingUp } from "lucide-react";
-import { getAllBlogs } from "../../services/blogs";
+import { getAllBlogs, deleteBlog } from "../../services/blogs";
 import BlogPreview from "./BlogPreview";
 import MailingListPreview from "./MailingListPreview";
 import { getCategories } from "../../services/blogs";
@@ -36,15 +36,21 @@ function Dashboard() {
     };
   
     fetchData();
-  }, [navigate, blogs, subscribers]);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/admin/login");
   };
 
-  const handleDeleteBlog = (blogId) => {
-    setBlogs(blogs.filter((blog) => blog._id !== blogId));
+  const handleDeleteBlog = async (blogId) => {
+    try {
+      await deleteBlog(blogId);
+      setBlogs(blogs.filter((blog) => blog._id !== blogId));
+    } catch (err) {
+      console.error("Error deleting blog:", err);
+      alert("Failed to delete blog. Please try again.");
+    }
   };
 
   const handleDeleteSubscriber = async (subscriberId) => {
