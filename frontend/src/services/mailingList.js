@@ -1,4 +1,4 @@
-import apiFetch from "./api";
+import {apiFetch }from "./api";
 
 export const subscribeToMailingList = async (email) => {
   const data = await apiFetch("/mailing-list/subscribe", {

@@ -5,16 +5,13 @@ import { getAllBlogs } from "../../services/blogs";
 import BlogPreview from "./BlogPreview";
 import MailingListPreview from "./MailingListPreview";
 import { getCategories } from "../../services/blogs";
-import { getMailingList } from "../../services/mailingData";
-
-const mailingList = getMailingList();
-
+import { getMailingList } from "../../services/mailingList";
 
 function Dashboard() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [subcribers, setSubcribers] = useState(mailingList);
+  const [subscribers, setSubscribers] = useState([]);
 
   useEffect(() => {
     const isAuth = localStorage.getItem("token");
@@ -31,7 +28,8 @@ function Dashboard() {
         setCategories(categoriesData);
 
         const subscribersData = await getMailingList();
-        setSubcribers(subscribersData);
+        setSubscribers(subscribersData);
+        console.log(subscribersData);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -41,16 +39,16 @@ function Dashboard() {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("adminAuth");
+    localStorage.removeItem("token");
     navigate("/admin/login");
   };
 
   const handleDeleteBlog = (blogId) => {
-    setBlogs(blogs.filter((blog) => blog.id !== blogId));
+    setBlogs(blogs.filter((blog) => blog._id !== blogId));
   };
 
   const handleDeleteSubscriber = (subscriberId) => {
-    setMailingList(subcribers.filter((sub) => sub.id !== subscriberId));
+    setSubscribers(subscribers.filter((sub) => sub._id !== subscriberId));
   };
 
   return (
@@ -103,7 +101,7 @@ function Dashboard() {
               <TrendingUp className="w-5 h-5 text-[#9CA3AF]" />
             </div>
             <div className="text-[48px] font-light text-[#0A0A0A] leading-none mb-2">
-              {mailingList.length}
+              {subscribers.length}
             </div>
             <p className="text-base text-[#6B7280]">Mailing List</p>
           </Link>
@@ -152,7 +150,7 @@ function Dashboard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <BlogPreview blogs={blogs} categories={categories} onDelete={handleDeleteBlog} />
-            <MailingListPreview subscribers={subcribers} onDelete={handleDeleteSubscriber} />
+            <MailingListPreview subscribers={subscribers} onDelete={handleDeleteSubscriber} />
           </div>
         </div>
       </div>

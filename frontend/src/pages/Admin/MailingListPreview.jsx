@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Download, Trash2 } from "lucide-react";
 import Pagination from "../../components/Pagination";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
+import { formatDate } from "../../utils/dateFormat";
 
 function MailingListPreview({ subscribers, onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,9 +62,9 @@ function MailingListPreview({ subscribers, onDelete }) {
           </thead>
           <tbody>
             {paginatedMail.map((subscriber) => (
-              <tr key={subscriber.id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
+              <tr key={subscriber._id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
                 <td className="py-3 px-2 text-sm text-[#0A0A0A]">{subscriber.email}</td>
-                <td className="py-3 px-2 text-sm text-[#6B7280]">{subscriber.dateJoined || "N/A"}</td>
+                <td className="py-3 px-2 text-sm text-[#6B7280]">{formatDate(subscriber.subscribedAt)}</td>
                 <td className="py-3 px-2">
                   <div className="flex items-center justify-end">
                     <button

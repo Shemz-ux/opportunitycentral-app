@@ -58,7 +58,7 @@ function BlogPreview({ blogs, categories, onDelete }) {
           </thead>
           <tbody>
             {paginatedBlogs.map((blog, index) => (
-              <tr key={blog.id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors cursor-pointer" onClick={() => window.open(`/blog/${blog.slug}`, '_blank')}>
+              <tr key={blog._id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors cursor-pointer" onClick={() => window.open(`/blog/${blog.slug}`, '_blank')}>
                 <td className="py-3 px-2 text-sm text-[#0A0A0A]">
                   <div className="max-w-[200px] truncate" title={blog.title}>
                     {blog.title}

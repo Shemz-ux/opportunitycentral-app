@@ -1,22 +1,32 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
+import { loginAdmin } from "../../services/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    if (email === "admin@opportunitycentral.com" && password === "admin123") {
-      localStorage.setItem("adminAuth", "true");
-      navigate("/admin/dashboard");
-    } else {
-      setError("Invalid credentials. Please try again.");
+    try {
+      const data = await loginAdmin(email, password);
+      
+      if (data.token) {
+        navigate("/admin/dashboard");
+      } else {
+        setError("Login failed. Please try again.");
+      }
+    } catch (err) {
+      setError(err.message || "Invalid credentials. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,16 +82,17 @@ function Login() {
 
             <button
               type="submit"
-              className="w-full px-8 py-4 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity cursor-pointer"
+              disabled={loading}
+              className="w-full px-8 py-4 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+              {loading ? "Signing in..." : "Sign In"}
             </button>
           </div>
         </form>
 
         <div className="mt-6 pt-6 border-t border-[#E5E7EB] text-center">
           <p className="text-xs text-[#9CA3AF]">
-            Demo credentials: admin@opportunitycentral.com / admin123
+            Demo credentials: admin@opportunitycentral.com / SecurePassword123!
           </p>
         </div>
       </div>

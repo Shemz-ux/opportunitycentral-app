@@ -4,9 +4,8 @@ import { Download, Trash2, Mail } from "lucide-react";
 import Pagination from "../../components/Pagination";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import Breadcrumbs from "../../components/Breadcrumbs";
-import { getMailingList } from "../../services/mailingData";
-
-const mailingList = getMailingList();
+import { getMailingList } from "../../services/mailingList";
+import { formatDate } from "../../utils/dateFormat";
 
 function MailingList() {
   const navigate = useNavigate();
@@ -16,11 +15,22 @@ function MailingList() {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, subscriber: null });
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("adminAuth");
+    const isAuth = localStorage.getItem("token");
     if (!isAuth) {
       navigate("/admin/login");
     }
-    setSubscribers(mailingList);
+ 
+    const fetchData = async () => {
+      try {
+        const subscribersData = await getMailingList();
+        setSubscribers(subscribersData);
+        
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+  
+    fetchData();
   }, [navigate]);
 
   const filteredSubscribers = subscribers;
@@ -95,7 +105,7 @@ function MailingList() {
               </thead>
               <tbody>
                 {paginatedSubscribers.map((subscriber) => (
-                  <tr key={subscriber.id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
+                  <tr key={subscriber._id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
                     {/* <td className="py-4 px-4 text-sm text-[#0A0A0A]">{subscriber.name}</td> */}
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
@@ -103,7 +113,7 @@ function MailingList() {
                         <span className="text-sm text-[#6B7280]">{subscriber.email}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-sm text-[#6B7280]">{subscriber.dateJoined }</td>
+                    <td className="py-4 px-4 text-sm text-[#6B7280]">{formatDate(subscriber.subscribedAt)}</td>
                     <td className="py-4 px-4">
                       <div className="flex items-center justify-end gap-2">
                         <button
