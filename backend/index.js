@@ -38,14 +38,16 @@ connection().then(db => {
     require('./controllers/blogs').setDb(db);
     require('./controllers/mailingList').setDb(db);
     require('./controllers/admin').setDb(db);
-
+    require('./controllers/contact').setDb(db);
+    
     app.get('/', (req, res) => {
         res.send('You are connected to the OC-web server!')
     });
-
+    
     app.use('/api/blogs', blogRouter);
     app.use('/api/mailingList', mailingListRouter);
     app.use('/api/admin', require('./routes/admin'));
+    app.use('/api/contact', require('./routes/contact'));
     
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {

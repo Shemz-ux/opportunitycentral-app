@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, ArrowRight, Send, Clock, ArrowDown } from "lucide-react";
+import { submitContactForm } from "../../services/contact";
 
 const enquiryTypes = [
   "Executive Leadership",
@@ -18,10 +19,21 @@ function ContactPage() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+  
+    try {
+      await submitContactForm(formData);
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Contact form error:", err);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,7 +99,7 @@ function ContactPage() {
                       <div>
                         <label className="block text-sm text-[#0A0A0A] mb-2">Enquiry Type</label>
                         <select value={formData.enquiryType} onChange={(e) => setFormData({ ...formData, enquiryType: e.target.value })} className="w-full px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] focus:outline-none focus:border-[#0A0A0A] transition-colors appearance-none">
-                          <option value="">Select a service <ArrowDown/></option>
+                          <option value="">Select a service</option>
                           {enquiryTypes.map((t) => (
                             <option key={t} value={t}>{t}</option>
                           ))}
@@ -100,8 +112,12 @@ function ContactPage() {
                       <textarea required rows={5} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} placeholder="Tell us about your goals, challenges, or questions..." className="w-full px-5 py-4 bg-[#F9FAFB] border border-[#E5E7EB] rounded-2xl text-sm text-[#0A0A0A] placeholder:text-[#D1D5DB] focus:outline-none focus:border-[#0A0A0A] transition-colors resize-none" />
                     </div>
 
-                    <button type="submit" className="group inline-flex items-center gap-2 px-8 py-4 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity cursor-pointer">
-                      Send Message
+                    <button 
+                      type="submit" 
+                      disabled={loading}
+                      className="group inline-flex items-center gap-2 px-8 py-4 bg-[#0A0A0A] text-white rounded-full text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? "Sending..." : "Send Message"}
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
                   </form>
