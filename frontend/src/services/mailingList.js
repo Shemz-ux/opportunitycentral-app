@@ -1,7 +1,7 @@
 import {apiFetch }from "./api";
 
 export const subscribeToMailingList = async (email) => {
-  const data = await apiFetch("/mailing-list/subscribe", {
+  const data = await apiFetch("/mailingList/subscribe", {
     method: "POST",
     body: JSON.stringify({ email }),
   });
@@ -23,7 +23,7 @@ export const getMailingList = async (filters = {}) => {
   return data.entries;
 };
 
-export const deleteSubcriber = async (subscriberId) => {
+export const deleteSubscriber = async (subscriberId) => {
   const data = await apiFetch(`/mailingList/${subscriberId}`, {
     method: "DELETE",
   });

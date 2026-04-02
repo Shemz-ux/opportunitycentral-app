@@ -1,7 +1,44 @@
 import { Link } from "react-router";
+import { useState } from "react";
+import { subscribeToMailingList } from "../services/mailingList";
 import icon from '../assets/opportunitycentral-white.png';
 
 function Footer() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState(""); // 'success', 'error', or ''
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+ 
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes("@")) {
+      setStatus("error");
+      setMessage("Please enter a valid email address");
+      return;
+    }
+ 
+    setLoading(true);
+    setStatus("");
+    setMessage("");
+ 
+    try {
+      await subscribeToMailingList(email);
+      setStatus("success");
+      setMessage("You have successfully subscribed to our newsletter!");
+      setEmail("");
+    } catch (err) {
+      setStatus("error");
+      setMessage(err.message || "Failed to subscribe. Please try again.");
+    } finally {
+      setLoading(false);
+      // Clear message after 5 seconds
+      setTimeout(() => {
+        setStatus("");
+        setMessage("");
+      }, 5000);
+    }
+  };
   return (
     <footer className="bg-[#0A0A0A] text-white py-20">
       <div className="max-w-[1400px] mx-auto px-8">
@@ -18,21 +55,31 @@ function Footer() {
               Out About Upcoming Launch Dates, And Get Free Insight On Branding
               Strategy.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-6 py-4 bg-white/10 border border-white/20 rounded-full text-white placeholder:text-gray-500 focus:outline-none focus:border-white/40"
-              />
-
-              <button to="/newsletter" className="px-8 py-4 bg-white text-[#0A0A0A] rounded-full hover:bg-gray-100 transition-colors cursor-pointer">
-                Subscribe
-              </button>
-              {/* TODO: Add newsletter subscription functionality + success when submitted */}
-            </div>
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              disabled={loading}
+              className="flex-1 px-6 py-4 bg-white/10 border border-white/20 rounded-full text-white placeholder:text-gray-500 focus:outline-none focus:border-white/40 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          
+            <button 
+              type="submit"
+              disabled={loading}
+              className="px-8 py-4 bg-white text-[#0A0A0A] rounded-full hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Subscribing..." : "Subscribe"}
+            </button>
+          </form>
+          {message && (
+            <p className={`mt-4 text-sm ${status === "success" ? "text-green-400" : "text-red-400"}`}>
+              {message}
+            </p>
+          )}
           </div>
         </div>
-
         {/* Footer Links */}
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           <div className="lg:col-span-2">

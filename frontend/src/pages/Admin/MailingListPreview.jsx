@@ -19,7 +19,7 @@ function MailingListPreview({ subscribers, onDelete }) {
 
   const confirmDelete = () => {
     if (onDelete && deleteModal.subscriber) {
-      onDelete(deleteModal.subscriber.id);
+      onDelete(deleteModal.subscriber._id);
     }
     setDeleteModal({ isOpen: false, subscriber: null });
   };

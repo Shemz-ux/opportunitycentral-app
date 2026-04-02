@@ -5,7 +5,7 @@ import { getAllBlogs } from "../../services/blogs";
 import BlogPreview from "./BlogPreview";
 import MailingListPreview from "./MailingListPreview";
 import { getCategories } from "../../services/blogs";
-import { getMailingList } from "../../services/mailingList";
+import { getMailingList, deleteSubscriber } from "../../services/mailingList";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ function Dashboard() {
     };
   
     fetchData();
-  }, [navigate]);
+  }, [navigate, blogs, subscribers]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -47,8 +47,14 @@ function Dashboard() {
     setBlogs(blogs.filter((blog) => blog._id !== blogId));
   };
 
-  const handleDeleteSubscriber = (subscriberId) => {
-    setSubscribers(subscribers.filter((sub) => sub._id !== subscriberId));
+  const handleDeleteSubscriber = async (subscriberId) => {
+    try {
+      await deleteSubscriber(subscriberId);
+      setSubscribers(subscribers.filter((sub) => sub._id !== subscriberId));
+    } catch (err) {
+      console.error("Error deleting subscriber:", err);
+      alert("Failed to delete subscriber. Please try again.");
+    }
   };
 
   return (

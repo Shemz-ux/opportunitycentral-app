@@ -10,8 +10,11 @@ const mailingListRouter = express.Router();
 
 mailingListRouter
     .route("/")
-    .post(createMailingListEntry)
     .get(authenticateToken, getMailingList);
+
+mailingListRouter
+    .route("/subscribe")
+    .post(createMailingListEntry);
 
 mailingListRouter
     .route("/:id")

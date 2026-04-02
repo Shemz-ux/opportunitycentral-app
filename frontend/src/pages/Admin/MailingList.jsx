@@ -4,7 +4,7 @@ import { Download, Trash2, Mail } from "lucide-react";
 import Pagination from "../../components/Pagination";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import Breadcrumbs from "../../components/Breadcrumbs";
-import { getMailingList } from "../../services/mailingList";
+import { getMailingList, deleteSubscriber } from "../../services/mailingList";
 import { formatDate } from "../../utils/dateFormat";
 
 function MailingList() {
@@ -31,7 +31,7 @@ function MailingList() {
     };
   
     fetchData();
-  }, [navigate]);
+  }, [navigate, subscribers]);
 
   const filteredSubscribers = subscribers;
 
@@ -48,9 +48,16 @@ function MailingList() {
     setDeleteModal({ isOpen: true, subscriber });
   };
 
-  const confirmDelete = () => {
-    setSubscribers(subscribers.filter((s) => s.id !== deleteModal.subscriber.id));
-    setDeleteModal({ isOpen: false, subscriber: null });
+  const confirmDelete = async () => {
+    try {
+      await deleteSubscriber(deleteModal.subscriber._id);
+      // Remove from local state after successful deletion
+      setSubscribers(subscribers.filter((s) => s._id !== deleteModal.subscriber._id));
+      setDeleteModal({ isOpen: false, subscriber: null });
+    } catch (err) {
+      console.error("Error deleting subscriber:", err);
+      alert("Failed to delete subscriber. Please try again.");
+    }
   };
 
   const handleExport = () => {
