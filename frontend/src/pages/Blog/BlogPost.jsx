@@ -1,14 +1,55 @@
-// TODO: consider an error page for a post that doesn't exist
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
 import { ArrowLeft, ArrowRight, Clock, Calendar } from "lucide-react";
-import { getAllBlogs, getBlogBySlug } from "../../services/blogData";
+import { getAllBlogs, getBlogBySlug, incrementBlogViews } from "../../services/blogData";
 
 export function BlogPost() {
   const { slug } = useParams();
-  const post = getBlogBySlug(slug);
-  const postIndex = getAllBlogs().findIndex((p) => p.slug === slug);
+  const [post, setPost] = useState(null);
+  const [allBlogs, setAllBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!post) {
+  useEffect(() => {
+    const fetchBlogData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Fetch the current blog post
+        const blogData = await getBlogBySlug(slug);
+        setPost(blogData);
+
+        // Increment view count
+        if (blogData?._id) {
+          await incrementBlogViews(blogData._id).catch(err => 
+            console.error('Failed to increment views:', err)
+          );
+        }
+
+        // Fetch all blogs for navigation and related posts
+        const blogs = await getAllBlogs({ sortBy: 'latest' });
+        setAllBlogs(blogs);
+      } catch (err) {
+        console.error('Error fetching blog:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogData();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <section className="py-32 text-center">
+        <div className="text-xl text-[#6B7280]">Loading...</div>
+      </section>
+    );
+  }
+
+  if (error || !post) {
     return (
       <section className="py-32 text-center">
         <h1 className="text-[36px] font-light text-[#0A0A0A] mb-4">Post not found</h1>
@@ -20,10 +61,10 @@ export function BlogPost() {
     );
   }
 
-  const related = getAllBlogs().filter((p) => p.slug !== post.slug).slice(0, 2);
-  // TODO: consider what happens if there is no previous or next post
-  const prevPost = postIndex > 0 ? getAllBlogs()[postIndex - 1] : null;
-  const nextPost = postIndex < getAllBlogs().length - 1 ? getAllBlogs()[postIndex + 1] : null;
+  const postIndex = allBlogs.findIndex((p) => p.slug === slug);
+  const related = allBlogs.filter((p) => p.slug !== post.slug).slice(0, 2);
+  const prevPost = postIndex > 0 ? allBlogs[postIndex - 1] : null;
+  const nextPost = postIndex < allBlogs.length - 1 ? allBlogs[postIndex + 1] : null;
 
   return (
     <>
@@ -114,7 +155,7 @@ export function BlogPost() {
           <h3 className="text-[28px] font-light text-[#0A0A0A] mb-10">You might also like</h3>
           <div className="grid md:grid-cols-2 gap-8">
             {related.map((r) => (
-              <Link key={r.slug} to={`/blog/${r.slug}`} className="group flex flex-col sm:flex-row gap-6">
+              <Link key={r._id} to={`/blog/${r.slug}`} className="group flex flex-col sm:flex-row gap-6">
                 <div className="sm:w-[240px] shrink-0 aspect-[3/2] sm:aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100">
                   <img src={r.image} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>

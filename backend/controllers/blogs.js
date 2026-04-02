@@ -147,7 +147,7 @@ const incrementView = (req, res) => {
             if (result.matchedCount === 0) {
                 return res.status(404).send({message: 'Blog not found!'});
             } else {
-                res.status(200)
+                res.status(200).send({message: '✅ Blog views incremented successfully!'});
             }
         })
         .catch(err => {

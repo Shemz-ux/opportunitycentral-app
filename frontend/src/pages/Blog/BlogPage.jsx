@@ -1,29 +1,67 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllBlogs, getBlogsByCategory, getCategories } from "../../services/blogData";
+import { getAllBlogs, getCategories } from "../../services/blogData";
 import { useFadeIn } from "../../hooks/useFadeIn";
+import { useEffect } from "react";
 
 function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [blogs, setBlogs] = useState([]);
+  const [categories, setCategories] = useState(["All"]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [headerRef, headerVisible] = useFadeIn({ threshold: 0.2 });
   const [featuredRef, featuredVisible] = useFadeIn({ threshold: 0.2 });
   const [categoriesRef, categoriesVisible] = useFadeIn({ threshold: 0.2 });
   const [postsRef, postsVisible] = useFadeIn({ threshold: 0.2 });
 
-  const filtered =
-    activeCategory === "All"
-      ? getAllBlogs()
-      : getBlogsByCategory(activeCategory);
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      setLoading(true);
+      setError(null);
 
-  console.log(filtered);
-  const featured = getAllBlogs()[0]; // TODO: Get the featured blog from the one with most clicks or the most recently posted
+      try {
+        const filters = {
+          isActive: true,
+          sortBy: 'latest',
+          ...(activeCategory !== "All" && { category: activeCategory })
+        };
+
+        const data = await getAllBlogs(filters);
+        setBlogs(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, [activeCategory]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(["All", ...data]);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        setError(err.message);
+      } 
+    };
+
+    fetchCategories();
+  }, []);
+
+  const featured = blogs[0];
   
-  // For pagination, use filtered list when not "All", otherwise exclude featured post
-  const postsForPagination = activeCategory === "All" 
-    ? filtered.filter((p) => p.slug !== featured.slug)
-    : filtered;
+  // For pagination, exclude featured post when showing "All"
+  const postsForPagination = activeCategory === "All" && featured
+    ? blogs.filter((p) => p._id !== featured._id)
+    : blogs;
 
   // Pagination logic
   const totalPages = Math.ceil(postsForPagination.length / itemsPerPage);
@@ -61,13 +99,19 @@ function BlogPage() {
         </div>
       </section>
 
-      {activeCategory === "All" && (
+      {loading ? (
+        <section className="bg-white pb-8">
+          <div className="max-w-[1400px] mx-auto px-8 text-center py-20">
+            <div className="text-lg text-[#6B7280]">Loading featured post...</div>
+          </div>
+        </section>
+      ) : activeCategory === "All" && featured ? (
         <section className="bg-white pb-8">
           <div className="max-w-[1400px] mx-auto px-8">
             <Link
               to={`/blog/${featured.slug}`}
               ref={featuredRef}
-              className={`block group transition-all duration-1000 ${featuredVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+              className="block group"
             >
               <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[480px]">
                 <img src={featured.image} alt={featured.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -86,7 +130,7 @@ function BlogPage() {
             </Link>
           </div>
         </section>
-      )}
+      ) : null}
 
       <section className="bg-white py-8">
         <div className="max-w-[1400px] mx-auto px-8">
@@ -94,7 +138,7 @@ function BlogPage() {
             ref={categoriesRef}
             className={`flex flex-wrap gap-3 transition-all duration-1000 ${categoriesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
-            {getCategories().map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleCategoryChange(cat)}
