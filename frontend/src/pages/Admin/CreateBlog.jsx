@@ -18,12 +18,24 @@ function CreateBlog() {
     content: "",
   });
   const [isActive, setIsActive] = useState(true);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const isAuth = localStorage.getItem("adminAuth");
     if (!isAuth) {
       navigate("/admin/login");
     }
+
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data.filter(cat => cat !== "All"));
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+
+    fetchCategories();
   }, [navigate]);
 
   const handleSubmit = (e) => {
@@ -51,8 +63,6 @@ function CreateBlog() {
       slug: generateSlug(title),
     });
   };
-
-  const categories = getCategories().filter(cat => cat !== "All");
   
   const breadcrumbItems = [
     { label: "Dashboard", href: "/admin/dashboard" },

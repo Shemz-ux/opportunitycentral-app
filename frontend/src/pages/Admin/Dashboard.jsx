@@ -13,14 +13,31 @@ const mailingList = getMailingList();
 function Dashboard() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [subcribers, setSubcribers] = useState(mailingList);
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("adminAuth");
+    const isAuth = localStorage.getItem("token");
     if (!isAuth) {
       navigate("/admin/login");
     }
-    setBlogs(getAllBlogs());
+ 
+    const fetchData = async () => {
+      try {
+        const blogsData = await getAllBlogs();
+        setBlogs(blogsData);
+        
+        const categoriesData = await getCategories();
+        setCategories(categoriesData);
+
+        const subscribersData = await getMailingList();
+        setSubcribers(subscribersData);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+  
+    fetchData();
   }, [navigate]);
 
   const handleLogout = () => {
@@ -134,7 +151,7 @@ function Dashboard() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            <BlogPreview blogs={blogs} categories={getCategories()} onDelete={handleDeleteBlog} />
+            <BlogPreview blogs={blogs} categories={categories} onDelete={handleDeleteBlog} />
             <MailingListPreview subscribers={subcribers} onDelete={handleDeleteSubscriber} />
           </div>
         </div>

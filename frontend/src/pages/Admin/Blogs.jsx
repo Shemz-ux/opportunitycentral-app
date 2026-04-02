@@ -10,6 +10,7 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 function Blogs() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,11 +18,24 @@ function Blogs() {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, blog: null });
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("adminAuth");
+    const isAuth = localStorage.getItem("token");
     if (!isAuth) {
       navigate("/admin/login");
     }
-    setBlogs(getAllBlogs());
+
+    const fetchData = async () => {
+      try {
+          const blogsData = await getAllBlogs();
+          setBlogs(blogsData);
+          
+          const categoriesData = await getCategories();
+          setCategories(categoriesData.filter(cat => cat !== "All"));
+        } catch (err) {
+          console.error("Error fetching data:", err);
+        }
+      };
+  
+    fetchData();
   }, [navigate]);
 
   const filteredBlogs = blogs.filter((blog) => {
@@ -48,8 +62,6 @@ function Blogs() {
     setBlogs(blogs.filter((b) => b.id !== deleteModal.blog.id));
     setDeleteModal({ isOpen: false, blog: null });
   };
-
-  const categories = getCategories().filter(cat => cat !== "All");
 
   const breadcrumbItems = [
     { label: "Dashboard", href: "/admin/dashboard" },

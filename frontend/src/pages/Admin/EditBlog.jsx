@@ -20,31 +20,44 @@ function EditBlog() {
   });
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("adminAuth");
+    const isAuth = localStorage.getItem("token");
     if (!isAuth) {
       navigate("/admin/login");
       return;
     }
-
-    const blog = getBlogBySlug(slug);
-    if (blog) {
-      setFormData({
-        title: blog.title,
-        slug: blog.slug,
-        excerpt: blog.excerpt,
-        category: blog.category,
-        image: blog.image,
-        author: blog.author,
-        authorRole: blog.authorRole,
-        content: Array.isArray(blog.content) ? blog.content.join("\n\n") : blog.content,
-      });
-      setLoading(false);
-    } else {
-      navigate("/admin/blogs");
-    }
-  }, [navigate, slug]);
+ 
+    const fetchData = async () => {
+      try {
+        const blog = await getBlogBySlug(slug);
+        if (blog) {
+          setFormData({
+            title: blog.title,
+            slug: blog.slug,
+            excerpt: blog.excerpt,
+            category: blog.category,
+            image: blog.image,
+            author: blog.author,
+            authorRole: blog.authorRole,
+            content: blog.content.join("\n\n"),
+          });
+          setIsActive(blog.isActive !== false);
+        }
+  
+        const categoriesData = await getCategories();
+        setCategories(categoriesData.filter(cat => cat !== "All"));
+        
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setLoading(false);
+      }
+    };
+ 
+    fetchData();
+  }, [slug, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,8 +69,6 @@ function EditBlog() {
   const handleCancel = () => {
     navigate("/admin/blogs");
   };
-
-  const categories = getCategories().filter(cat => cat !== "All");
   
   const breadcrumbItems = [
     { label: "Dashboard", href: "/admin/dashboard" },
