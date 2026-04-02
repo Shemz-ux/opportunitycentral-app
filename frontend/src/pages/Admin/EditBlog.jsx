@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Save, X } from "lucide-react";
-import { getBlogBySlug, getCategories } from "../../services/blogData";
+import { getBlogBySlug, getCategories } from "../../services/blogs";
 import { calculateReadTime } from "../../utils/readTime";
 import Breadcrumbs from "../../components/Breadcrumbs";
 

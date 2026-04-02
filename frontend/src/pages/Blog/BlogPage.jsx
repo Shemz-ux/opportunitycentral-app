@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllBlogs, getCategories } from "../../services/blogData";
+import { getAllBlogs, getCategories } from "../../services/blogs";
 import { useFadeIn } from "../../hooks/useFadeIn";
 import { useEffect } from "react";
 

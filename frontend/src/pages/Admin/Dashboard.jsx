@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FileText, Users, Eye, Plus, LogOut, TrendingUp } from "lucide-react";
-import { getAllBlogs } from "../../services/blogData";
+import { getAllBlogs } from "../../services/blogs";
 import BlogPreview from "./BlogPreview";
 import MailingListPreview from "./MailingListPreview";
-import { getCategories } from "../../services/blogData";
+import { getCategories } from "../../services/blogs";
 import { getMailingList } from "../../services/mailingData";
 
 const mailingList = getMailingList();

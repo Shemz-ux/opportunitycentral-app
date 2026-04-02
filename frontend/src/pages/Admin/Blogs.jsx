@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus, Edit2, Trash2, Eye } from "lucide-react";
-import { getAllBlogs, getCategories } from "../../services/blogData";
+import { getAllBlogs, getCategories } from "../../services/blogs";
 import Filters from "./Filters";
 import Pagination from "../../components/Pagination";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";

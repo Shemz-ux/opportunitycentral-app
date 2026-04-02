@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
 import { ArrowLeft, ArrowRight, Clock, Calendar } from "lucide-react";
-import { getAllBlogs, getBlogBySlug, incrementBlogViews } from "../../services/blogData";
+import { getAllBlogs, getBlogBySlug, incrementBlogViews } from "../../services/blogs";
 
 export function BlogPost() {
   const { slug } = useParams();
