@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { FileText, Users, Eye, Plus, LogOut, TrendingUp } from "lucide-react";
+import { FileText, Users, Eye, Plus, LogOut, TrendingUp, Lock } from "lucide-react";
 import { getAllBlogs, deleteBlog } from "../../services/blogs";
 import BlogPreview from "./BlogPreview";
 import MailingListPreview from "./MailingListPreview";
@@ -119,14 +119,23 @@ function Dashboard() {
               Welcome back! Here's an overview of your content.
             </p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 border border-[#0A0A0A] rounded-full text-xs sm:text-sm text-[#0A0A0A] hover:text-white transition-colors relative overflow-hidden group cursor-pointer"
-          >
-            <span className="absolute inset-0 bg-[#0A0A0A] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
-            <LogOut className="w-4 h-4 relative z-10" />
-            <span className="relative z-10">Logout</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/admin/change-password"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 border border-[#E5E7EB] rounded-full text-xs sm:text-sm text-[#6B7280] hover:text-[#0A0A0A] hover:border-[#0A0A0A] transition-colors"
+            >
+              <Lock className="w-4 h-4" />
+              <span className="hidden sm:inline">Change Password</span>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 border border-[#0A0A0A] rounded-full text-xs sm:text-sm text-[#0A0A0A] hover:text-white transition-colors relative overflow-hidden group cursor-pointer"
+            >
+              <span className="absolute inset-0 bg-[#0A0A0A] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
+              <LogOut className="w-4 h-4 relative z-10" />
+              <span className="relative z-10">Logout</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">

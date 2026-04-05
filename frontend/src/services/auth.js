@@ -35,3 +35,11 @@ export const getCurrentAdmin = () => {
   }
 };
 
+export const changePassword = async (currentPassword, newPassword) => {
+  const data = await apiFetch("/admin/change-password", {
+    method: "PATCH",
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+
+  return data;
+};

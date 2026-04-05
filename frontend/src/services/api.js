@@ -28,10 +28,17 @@ const apiFetch = async (endpoint, options = {}) => {
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'Request failed' }));
     
+    // Only logout for token-related auth errors, not password validation errors
     if (response.status === 401 || response.status === 403) {
-      removeAuthToken();
-      window.location.href = '/admin/login';
-      throw new Error('Session expired. Please login again.');
+      const isTokenError = error.message?.toLowerCase().includes('token') || 
+                          error.message?.toLowerCase().includes('expired') ||
+                          error.message?.toLowerCase().includes('access token required');
+      
+      if (isTokenError) {
+        removeAuthToken();
+        window.location.href = '/admin/login';
+        throw new Error('Session expired. Please login again.');
+      }
     }
 
     throw new Error(error.message || `HTTP error! status: ${response.status}`);

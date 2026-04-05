@@ -14,6 +14,7 @@ import AdminBlogs from './pages/Admin/Blogs';
 import AdminMailingList from './pages/Admin/MailingList';
 import AdminCreateBlog from './pages/Admin/CreateBlog';
 import AdminEditBlog from './pages/Admin/EditBlog';
+import AdminChangePassword from './pages/Admin/ChangePassword';
 import ScrollToTop from './hooks/scrollToTop';
 
 function App() {
@@ -76,6 +77,10 @@ function App() {
     {
       path: "/admin/mailing-list",
       element: <Layout><AdminMailingList /></Layout>
+    },
+    {
+      path: "/admin/change-password",
+      element: <Layout><AdminChangePassword /></Layout>
     }
   ]);
 

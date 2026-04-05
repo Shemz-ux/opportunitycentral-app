@@ -170,4 +170,54 @@ const deleteAdmin = async (req, res) => {
     }
 };
 
-module.exports = { registerAdmin, loginAdmin, updateAdmin, deleteAdmin, setDb };
+const changePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    const adminEmail = req.admin.email; // From JWT token
+
+    if (!currentPassword || !newPassword) {
+        return res.status(400).send({ message: '⚠️ Current password and new password are required!' });
+    }
+
+    if (newPassword.length < 6) {
+        return res.status(400).send({ message: '⚠️ New password must be at least 6 characters!' });
+    }
+
+    const collection = db.collection('admins');
+
+    try {
+        // Get admin from database
+        const admin = await collection.findOne({ email: adminEmail });
+        
+        if (!admin) {
+            return res.status(404).send({ message: '⚠️ Admin not found!' });
+        }
+
+        // Verify current password
+        const isPasswordValid = await bcrypt.compare(currentPassword, admin.password);
+        if (!isPasswordValid) {
+            return res.status(401).send({ message: '⚠️ Current password is incorrect!' });
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+        // Update password
+        await collection.updateOne(
+            { email: adminEmail },
+            { 
+                $set: { 
+                    password: hashedPassword,
+                    updatedAt: new Date()
+                } 
+            }
+        );
+
+        console.log(`✅ Password changed for admin: ${adminEmail}`);
+        res.status(200).send({ message: '✅ Password changed successfully!' });
+    } catch (err) {
+        console.error('❌ CHANGE PASSWORD ERROR:', err);
+        res.status(500).send({ message: '❌ Error occurred while changing password!', error: err.message });
+    }
+};
+
+module.exports = { registerAdmin, loginAdmin, updateAdmin, deleteAdmin, changePassword, setDb };
