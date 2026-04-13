@@ -29,6 +29,16 @@ function App() {
     )
   }
 
+  const AdminLayout = ({children}) => {
+    return (
+      <>
+        <ScrollToTop />
+        <Navbar/>
+        {children}
+      </>
+    )
+  }
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -56,31 +66,31 @@ function App() {
     },
     {
       path: "/admin/login",
-      element: <Layout><AdminLogin /></Layout>
+      element: <AdminLayout><AdminLogin /></AdminLayout>
     },
     {
       path: "/admin/dashboard",
-      element: <Layout><AdminDashboard /></Layout>
+      element: <AdminLayout><AdminDashboard /></AdminLayout>
     },
     {
       path: "/admin/blogs",
-      element: <Layout><AdminBlogs /></Layout>
+      element: <AdminLayout><AdminBlogs /></AdminLayout>
     },
     {
       path: "/admin/blogs/create",
-      element: <Layout><AdminCreateBlog /></Layout>
+      element: <AdminLayout><AdminCreateBlog /></AdminLayout>
     },
     {
       path: "/admin/blogs/edit/:slug",
-      element: <Layout><AdminEditBlog /></Layout>
+      element: <AdminLayout><AdminEditBlog /></AdminLayout>
     },
     {
       path: "/admin/mailing-list",
-      element: <Layout><AdminMailingList /></Layout>
+      element: <AdminLayout><AdminMailingList /></AdminLayout>
     },
     {
       path: "/admin/change-password",
-      element: <Layout><AdminChangePassword /></Layout>
+      element: <AdminLayout><AdminChangePassword /></AdminLayout>
     }
   ]);
 
