@@ -148,7 +148,7 @@ function Blogs() {
                   ))
                 ) : (
                   paginatedBlogs.map((blog) => (
-                  <tr key={blog.id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
+                  <tr key={blog._id} className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors">
                     <td className="py-4 px-4">
                       <div className="max-w-md">
                         <p className="text-sm text-[#0A0A0A] font-normal mb-1 line-clamp-1">
