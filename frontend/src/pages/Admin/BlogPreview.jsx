@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Edit2, Trash2, Eye } from "lucide-react";
+import { Edit2, Trash2, Eye, Check, X } from "lucide-react";
 import Filters from "./Filters";
 import Pagination from "../../components/Pagination";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
@@ -53,7 +53,8 @@ function BlogPreview({ blogs, categories, onDelete }) {
               <th className="text-left py-3 px-2 text-xs font-normal text-[#9CA3AF]">Title</th>
               <th className="text-left py-3 px-2 text-xs font-normal text-[#9CA3AF]">Category</th>
               <th className="text-left py-3 px-2 text-xs font-normal text-[#9CA3AF]">Created</th>
-              <th className="text-right py-3 px-2 text-xs font-normal text-[#9CA3AF]">Actions</th>
+              <th className="text-center py-3 px-1 text-xs font-normal text-[#9CA3AF]">Active</th>
+              <th className="text-center py-3 px-2 text-xs font-normal text-[#9CA3AF]">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -66,6 +67,17 @@ function BlogPreview({ blogs, categories, onDelete }) {
                 </td>
                 <td className="py-3 px-2 text-sm text-[#6B7280]">{blog.category}</td>
                 <td className="py-3 px-2 text-sm text-[#6B7280]">{blog.date}</td>
+                <td className="py-3 px-2 text-center">
+                  {blog.isActive !== false ? (
+                    <div className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-50">
+                      <Check className="w-4 h-4 text-green-600" />
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-50">
+                      <X className="w-4 h-4 text-red-600" />
+                    </div>
+                  )}
+                </td>
                 <td className="py-3 px-2" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-end gap-1">
                     <Link

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Edit2, Trash2, Eye } from "lucide-react";
+import { Plus, Edit2, Trash2, Eye, Check, X } from "lucide-react";
 import { getAllBlogs, getCategories, deleteBlog } from "../../services/blogs";
 import Filters from "./Filters";
 import Pagination from "../../components/Pagination";
@@ -115,7 +115,8 @@ function Blogs() {
                   <th className="text-left py-4 px-4 text-sm font-normal text-[#9CA3AF]">Category</th>
                   <th className="text-left py-4 px-4 text-sm font-normal text-[#9CA3AF]">Date</th>
                   <th className="text-left py-4 px-4 text-sm font-normal text-[#9CA3AF]">Author</th>
-                  <th className="text-right py-4 px-4 text-sm font-normal text-[#9CA3AF]">Actions</th>
+                  <th className="text-center py-4 px-4 text-sm font-normal text-[#9CA3AF]">Active</th>
+                  <th className="text-center py-4 px-4 text-sm font-normal text-[#9CA3AF]">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -136,6 +137,9 @@ function Blogs() {
                       </td>
                       <td className="py-4 px-4">
                         <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-6 w-6 bg-gray-200 rounded-full animate-pulse mx-auto" />
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex items-center justify-end gap-2">
@@ -166,6 +170,17 @@ function Blogs() {
                     </td>
                     <td className="py-4 px-4 text-sm text-[#6B7280]">{blog.date}</td>
                     <td className="py-4 px-4 text-sm text-[#6B7280]">{blog.author}</td>
+                    <td className="py-4 px-4 text-center">
+                      {blog.isActive !== false ? (
+                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-50">
+                          <Check className="w-4 h-4 text-green-600" />
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-50">
+                          <X className="w-4 h-4 text-red-600" />
+                        </div>
+                      )}
+                    </td>
                     <td className="py-4 px-4">
                       <div className="flex items-center justify-end gap-2">
                         <Link
