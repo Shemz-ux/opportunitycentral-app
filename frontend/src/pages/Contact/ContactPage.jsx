@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, ArrowRight, Send, Clock, ArrowDown } from "lucide-react";
 import { submitContactForm } from "../../services/contact";
+import { validateEmail, sanitizeEmail } from "../../utils/emailValidation";
 
 const enquiryTypes = [
   "Executive Leadership",
@@ -23,10 +24,23 @@ function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate email
+    const validation = validateEmail(formData.email);
+    if (!validation.isValid) {
+      alert(validation.error);
+      return;
+    }
+    
     setLoading(true);
   
     try {
-      await submitContactForm(formData);
+      // Sanitize email before sending
+      const cleanFormData = {
+        ...formData,
+        email: sanitizeEmail(formData.email)
+      };
+      await submitContactForm(cleanFormData);
       setSubmitted(true);
     } catch (err) {
       console.error("Contact form error:", err);

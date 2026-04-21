@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useState } from "react";
 import { subscribeToMailingList } from "../services/mailingList";
+import { validateEmail, sanitizeEmail } from "../utils/emailValidation";
 import icon from '../assets/opportunitycentral-white.png';
 
 function Footer() {
@@ -12,9 +13,11 @@ function Footer() {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     
-    if (!email || !email.includes("@")) {
+    // Validate email
+    const validation = validateEmail(email);
+    if (!validation.isValid) {
       setStatus("error");
-      setMessage("Please enter a valid email address");
+      setMessage(validation.error);
       return;
     }
  
@@ -23,7 +26,9 @@ function Footer() {
     setMessage("");
  
     try {
-      await subscribeToMailingList(email);
+      // Sanitize email before sending
+      const cleanEmail = sanitizeEmail(email);
+      await subscribeToMailingList(cleanEmail);
       setStatus("success");
       setMessage("You have successfully subscribed to our newsletter!");
       setEmail("");
