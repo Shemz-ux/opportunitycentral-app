@@ -94,7 +94,7 @@ function MailingListPreview({ subscribers, onDelete }) {
         onClose={() => setDeleteModal({ isOpen: false, subscriber: null })}
         onConfirm={confirmDelete}
         title="Remove Subscriber?"
-        message={`Are you sure you want to remove "${deleteModal.subscriber?.email}" from the mailing list?`}
+        message={`Are you sure you want to remove "${deleteModal.subscriber?.email}" from the mailing list? This action cannot be undone.`}
       />
     </div>
   );

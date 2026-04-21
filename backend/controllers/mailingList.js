@@ -31,7 +31,7 @@ const createMailingListEntry = (req, res) => {
             return collection.insertOne(entry)
                 .then(result => {
                     res.status(201).send({ 
-                        message: '✅ Successfully subscribed to mailing list!',
+                        message: '✅ Successfully subscribed to our mailing list!',
                         entry: { email }
                     });
                 });

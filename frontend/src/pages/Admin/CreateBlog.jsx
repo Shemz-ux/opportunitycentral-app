@@ -127,13 +127,13 @@ function CreateBlog() {
               </div>
 
               <div>
-                <label className="block text-sm text-[#0A0A0A] mb-2">Slug *</label>
+                <label className="block text-sm text-[#0A0A0A] mb-2">Slug (Auto-generated)</label>
                 <input
                   type="text"
                   required
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  placeholder="blog-post-slug"
+                  placeholder="/my-blogs-url"
                   className="w-full px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] placeholder:text-[#D1D5DB] focus:outline-none focus:border-[#0A0A0A] transition-colors"
                 />
               </div>
@@ -189,7 +189,7 @@ function CreateBlog() {
               </div>
 
               <div>
-                <label className="block text-sm text-[#0A0A0A] mb-2">Author Role *</label>
+                <label className="block text-sm text-[#0A0A0A] mb-2">Author Title *</label>
                 <input
                   type="text"
                   required
