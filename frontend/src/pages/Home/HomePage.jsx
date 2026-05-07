@@ -5,6 +5,7 @@ import WhoWeWorkWith from "./WhoWeWorkWith";
 import OurFounder from "./OurFounder";
 import Testimonials from "./Testimonials";
 import FAQ from "./FAQ";
+import CTA from "./CTA";
 
 function HomePage() {
     return (
@@ -15,7 +16,7 @@ function HomePage() {
             <WhoWeWorkWith />
             <OurFounder />
             <Testimonials />
-            <FAQ />
+            <CTA />
         </>
     );
 }
