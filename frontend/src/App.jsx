@@ -15,7 +15,7 @@ import AdminMailingList from './pages/Admin/MailingList';
 import AdminCreateBlog from './pages/Admin/CreateBlog';
 import AdminEditBlog from './pages/Admin/EditBlog';
 import AdminChangePassword from './pages/Admin/ChangePassword';
-import ScrollToTop from './hooks/scrollToTop';
+import ScrollToTop from './hooks/ScrollToTop';
 
 function App() {
   const Layout = ({children}) => {
