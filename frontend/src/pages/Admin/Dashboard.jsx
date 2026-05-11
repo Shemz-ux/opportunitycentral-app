@@ -178,7 +178,7 @@ function Dashboard() {
               </div>
             </div>
             <div className="text-[48px] font-light text-[#0A0A0A] leading-none mb-2">
-              23.5K
+              10
             </div>
             <p className="text-base text-[#6B7280]">Total Views</p>
           </div>

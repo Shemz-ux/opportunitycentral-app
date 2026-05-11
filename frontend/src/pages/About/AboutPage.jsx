@@ -113,7 +113,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-[#F9FAFB]">
+      {/* <section className="py-20 bg-[#F9FAFB]">
         <div
           ref={milestonesRef}
           className={`max-w-[1400px] mx-auto px-8 transition-all duration-1000 ${milestonesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
@@ -133,7 +133,7 @@ function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="py-24 bg-white">
         <div

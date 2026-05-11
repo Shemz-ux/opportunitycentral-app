@@ -96,15 +96,6 @@ function Login() {
             </button>
           </div>
         </form>
-
-        {/* Footer Note */}
-        <div className="mt-8 text-center">
-          <div className="inline-block px-6 py-3 bg-white/50 backdrop-blur-sm rounded-full border border-[#E5E7EB]">
-            <p className="text-sm text-[#9CA3AF]">
-              Demo: admin@opportunitycentral.com / SecurePassword123!
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   );
