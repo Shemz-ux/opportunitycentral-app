@@ -4,7 +4,8 @@ import { Save, X, Plus } from "lucide-react";
 import { getBlogBySlug, getCategories, updateBlog } from "../../services/blogs";
 import { calculateReadTime } from "../../utils/readTime";
 import { generateSlug } from "../../utils/slugGenerator";
-import { formatContentToArray } from "../../utils/contentFormatter";
+import { formatContentForEditor } from "../../utils/contentFormatter";
+import RichTextEditor from "../../components/RichTextEditor";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
 function EditBlog() {
@@ -48,7 +49,7 @@ function EditBlog() {
             image: blog.image,
             author: blog.author,
             authorRole: blog.authorRole,
-            content: Array.isArray(blog.content) ? blog.content.join("\n\n") : blog.content,
+            content: formatContentForEditor(blog.content),
           });
           setIsActive(blog.isActive !== false);
         }
@@ -72,11 +73,10 @@ function EditBlog() {
 
     try {
       const readTime = calculateReadTime(formData.content);
-      const contentArray = formatContentToArray(formData.content);
       
       const blogData = {
         ...formData,
-        content: contentArray,
+        content: formData.content,
         readTime,
         isActive
       };
@@ -193,13 +193,10 @@ function EditBlog() {
 
             <div>
               <label className="block text-sm text-[#0A0A0A] mb-2">Content *</label>
-              <textarea
-                required
-                rows={12}
+              <RichTextEditor
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                placeholder="Write your blog content here. Separate paragraphs with double line breaks..."
-                className="w-full px-5 py-4 bg-[#F9FAFB] border border-[#E5E7EB] rounded-2xl text-sm text-[#0A0A0A] placeholder:text-[#D1D5DB] focus:outline-none focus:border-[#0A0A0A] transition-colors resize-none"
+                onChange={(value) => setFormData({ ...formData, content: value })}
+                placeholder="Write your blog content here. Use the toolbar to format text, add lists, links, and more..."
               />
             </div>
 

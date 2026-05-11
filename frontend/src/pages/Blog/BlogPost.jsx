@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
 import { ArrowLeft, ArrowRight, Clock, Calendar } from "lucide-react";
 import { getAllBlogs, getBlogBySlug, incrementBlogViews } from "../../services/blogs";
+import "../../styles/blog-content.css";
 
 export function BlogPost() {
   const { slug } = useParams();
@@ -144,11 +145,20 @@ export function BlogPost() {
           </div>
 
           <div className="space-y-6">
-            {post.content.map((paragraph, i) => (
-              <p key={i} className={`text-base leading-[1.8] ${i === 0 ? "text-[#0A0A0A] text-lg" : "text-[#4B5563]"}`}>
-                {paragraph}
-              </p>
-            ))}
+            {Array.isArray(post.content) ? (
+              // Old format: array of paragraphs
+              post.content.map((paragraph, i) => (
+                <p key={i} className={`text-base leading-[1.8] ${i === 0 ? "text-[#0A0A0A] text-lg" : "text-[#4B5563]"}`}>
+                  {paragraph}
+                </p>
+              ))
+            ) : (
+              // New format: HTML string
+              <div 
+                className="blog-content"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+            )}
           </div>
 
           <div className="mt-14 pt-8 border-t border-[#E5E7EB] flex items-center justify-between">
