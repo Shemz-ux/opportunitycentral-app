@@ -92,10 +92,11 @@ function MailingList() {
           </div>
           <button
             onClick={handleExport}
-            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 border border-[#E5E7EB] rounded-full text-xs sm:text-sm text-[#0A0A0A] hover:bg-[#F9FAFB] transition-colors"
+            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 border border-[#0A0A0A] rounded-full text-xs sm:text-sm text-[#0A0A0A] hover:text-white transition-colors cursor-pointer relative overflow-hidden group"
           >
-            <Download className="w-4 h-4" />
-            Export CSV
+            <span className="absolute inset-0 bg-[#0A0A0A] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
+            <Download className="w-4 h-4 relative z-10" />
+            <span className="relative z-10">Export CSV</span>
           </button>
         </div>
 

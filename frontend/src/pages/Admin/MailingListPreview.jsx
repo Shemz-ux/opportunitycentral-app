@@ -44,10 +44,11 @@ function MailingListPreview({ subscribers, onDelete }) {
         <h3 className="text-[24px] font-light text-[#0A0A0A]">Mailing list</h3>
         <button 
           onClick={handleExport}
-          className="inline-flex items-center gap-2 px-4 py-2 border border-[#E5E7EB] rounded-full text-xs text-[#0A0A0A] hover:bg-[#F9FAFB] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 border border-[#E5E7EB] rounded-full text-xs text-[#0A0A0A] hover:text-white transition-colors cursor-pointer relative overflow-hidden group"
         >
-          <Download className="w-3 h-3" />
-          Export
+          <span className="absolute inset-0 bg-[#0A0A0A] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
+          <Download className="w-3 h-3 relative z-10" />
+          <span className="relative z-10">Export</span>
         </button>
       </div>
 
