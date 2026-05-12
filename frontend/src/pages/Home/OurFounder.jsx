@@ -12,8 +12,8 @@ const founderTestimonials = [
       "https://images.unsplash.com/photo-1590563152569-bd0b2dae4418?w=600&h=700&fit=crop",
   },
   {
-    name: "Sarah Bergmann",
-    title: "Founder & Chief Talent Strategist",
+    name: "Josie Campbell",
+    title: "Learning & Development Specialist",
     quote:
       "I believe that every organization has untapped potential within its people. My approach combines evidence-based methodologies with human-centered design, ensuring that our programs don't just train — they transform. At Opportunity Central, we don't believe in one-size-fits-all solutions. Each partnership is unique, tailored to your culture, your challenges, and your vision for the future.",
     image:
@@ -43,7 +43,7 @@ function OurFounder() {
           <h2 className="text-[40px] md:text-[48px] leading-[1.2] font-light text-[#0A0A0A]">
             Hear directly from
             <br />
-            <span className="font-light text-[#9CA3AF]">our founder</span>
+            <span className="font-light text-[#9CA3AF]">our founders</span>
           </h2>
         </div>
 
