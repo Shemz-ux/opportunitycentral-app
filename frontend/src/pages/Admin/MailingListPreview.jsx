@@ -27,7 +27,7 @@ function MailingListPreview({ subscribers, onDelete }) {
   const handleExport = () => {
     const csv = [
       ["Position", "Email", "Date Joined"],
-      ...subscribers.map((s, idx) => [idx + 1, s.email, s.dateJoined || "N/A"])
+      ...subscribers.map((s, idx) => [idx + 1, s.email, s.subscribedAt || "N/A"])
     ].map(row => row.join(",")).join("\n");
 
     const blob = new Blob([csv], { type: "text/csv" });
