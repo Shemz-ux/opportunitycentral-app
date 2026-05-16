@@ -7,6 +7,7 @@ import { generateSlug } from "../../utils/slugGenerator";
 import { formatContentForEditor } from "../../utils/contentFormatter";
 import RichTextEditor from "../../components/RichTextEditor";
 import Breadcrumbs from "../../components/Breadcrumbs";
+import ImageUploader from "../../components/ImageUploader";
 
 function EditBlog() {
   const navigate = useNavigate();
@@ -168,14 +169,11 @@ function EditBlog() {
             </div>
 
             <div>
-              <label className="block text-sm text-[#0A0A0A] mb-2">Image URL *</label>
-              <input
-                type="url"
-                required
+              <label className="block text-sm text-[#0A0A0A] mb-2">Blog Image *</label>
+              <ImageUploader
                 value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                placeholder="https://images.unsplash.com/..."
-                className="w-full px-5 py-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#0A0A0A] placeholder:text-[#D1D5DB] focus:outline-none focus:border-[#0A0A0A] transition-colors"
+                onChange={(value) => setFormData({ ...formData, image: value })}
+                required
               />
             </div>
 
