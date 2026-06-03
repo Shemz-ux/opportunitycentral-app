@@ -4,15 +4,15 @@ import { useFadeIn } from "../../hooks/useFadeIn";
 
 const founderTestimonials = [
   {
-    name: "Sarah Bergmann",
+    name: "Tracey Abayeta",
     title: "Founder & Chief Talent Strategist",
     quote:
       "For the past 15 years, I've had the privilege of working alongside remarkable organizations — from innovative startups to Fortune 500 companies, and from progressive universities to transformative educational institutions. What began as a passion for helping individuals unlock their potential evolved into Opportunity Central, a consultancy dedicated to creating systemic change through strategic talent development.",
     image:
-      "https://images.unsplash.com/photo-1590563152569-bd0b2dae4418?w=600&h=700&fit=crop",
+      "https://res.cloudinary.com/dcoilkm8r/image/upload/v1780519410/Tracey_Abayeta_headshot_at7hgi.jpg",
   },
   {
-    name: "Josie Campbell",
+    name: "Tracey Abayeta",
     title: "Learning & Development Specialist",
     quote:
       "I believe that every organization has untapped potential within its people. My approach combines evidence-based methodologies with human-centered design, ensuring that our programs don't just train — they transform. At Opportunity Central, we don't believe in one-size-fits-all solutions. Each partnership is unique, tailored to your culture, your challenges, and your vision for the future.",
@@ -92,7 +92,7 @@ function OurFounder() {
               <img
                 src={testimonial.image}
                 alt={testimonial.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top [image-rendering:-webkit-optimize-contrast] transform-gpu"
               />
             </div>
           </div>
