@@ -17,7 +17,7 @@ const founderTestimonials = [
     quote:
       "I believe that every organization has untapped potential within its people. My approach combines evidence-based methodologies with human-centered design, ensuring that our programs don't just train — they transform. At Opportunity Central, we don't believe in one-size-fits-all solutions. Each partnership is unique, tailored to your culture, your challenges, and your vision for the future.",
     image:
-      "https://images.unsplash.com/photo-1590563152569-bd0b2dae4418?w=600&h=700&fit=crop",
+      "https://res.cloudinary.com/dcoilkm8r/image/upload/v1780519410/Tracey_Abayeta_headshot_at7hgi.jpgp",
   },
 ];
 
