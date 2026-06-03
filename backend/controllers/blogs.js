@@ -1,4 +1,11 @@
 const { ObjectId } = require("mongodb");
+const { 
+    uploadBlogImage, 
+    deleteImageFromCloudinary, 
+    replaceImageInCloudinary, 
+    extractPublicIdFromUrl,
+    validateImageType 
+} = require("../services/mediaUpload");
 
 let db;
 
@@ -6,80 +13,122 @@ const setDb = (database) => {
     db = database;
 };
 
-const createBlog = (req, res) => {
-    const blog = {
-        ...req.body,
-        createdAt: new Date(),
-        updatedAt: new Date()
-    };
+const createBlog = async (req, res) => {
+    try {
+        const { image, ...blogData } = req.body;
 
-    const collection = db.collection('blogs');
+        if (!image) {
+            return res.status(400).send({ message: 'Image is required' });
+        }
 
-    collection.insertOne(blog)
-        .then(result => {
-            console.log(`✅Successfully created blog: ${result.insertedId}`)
-            res.status(201).send({newBlog: blog});
-        })
-        .catch(err => {
-            res.status(500).send('Error occurred could not created blog!');
-        });
+        if (!validateImageType(image)) {
+            return res.status(400).send({ message: 'Invalid image format' });
+        }
+
+        const uploadResult = await uploadBlogImage(image);
+
+        const blog = {
+            ...blogData,
+            image: uploadResult.url,
+            imagePublicId: uploadResult.publicId,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
+
+        const collection = db.collection('blogs');
+        const result = await collection.insertOne(blog);
+
+        console.log(`✅ Successfully created blog: ${result.insertedId}`);
+        res.status(201).send({ newBlog: blog });
+    } catch (err) {
+        console.error('❌ Error creating blog:', err);
+        res.status(500).send({ message: 'Error occurred could not create blog!' });
+    }
 };
 
-const deleteBlog = (req, res) => {
-    const collection = db.collection('blogs');
-    const { id } = req.params;
+const deleteBlog = async (req, res) => {
+    try {
+        const collection = db.collection('blogs');
+        const { id } = req.params;
 
-    if (!ObjectId.isValid(id)) {
-        return res.status(400).send({message: 'Invalid blog ID!'});
-    }
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).send({ message: 'Invalid blog ID!' });
+        }
 
-    collection.deleteOne({ _id: new ObjectId(id) })
-        .then(result => {
-            if (result.deletedCount === 0) {
-                return res.status(404).send({message: 'Blog not found!'});
-            } else {
-                console.log(`✅Successfully deleted blog: ${id}`);
-                res.status(200).send({message: `✅Blog ${id} deleted successfully!`});
+        const blog = await collection.findOne({ _id: new ObjectId(id) });
+
+        if (!blog) {
+            return res.status(404).send({ message: 'Blog not found!' });
+        }
+
+        if (blog.imagePublicId) {
+            try {
+                await deleteImageFromCloudinary(blog.imagePublicId);
+            } catch (imageError) {
+                console.warn('⚠️ Failed to delete image from Cloudinary, continuing with blog deletion');
             }
-        })
-        .catch(err => {
-            console.error('Error occurred while deleting blog:', err);
-            res.status(500).send('❌Error occurred while deleting blog!');
-        })
+        }
+
+        const result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+        console.log(`✅ Successfully deleted blog: ${id}`);
+        res.status(200).send({ message: `✅ Blog ${id} deleted successfully!` });
+    } catch (err) {
+        console.error('❌ Error occurred while deleting blog:', err);
+        res.status(500).send({ message: '❌ Error occurred while deleting blog!' });
+    }
 }
 
-const updateBlog = (req, res) => {
-    const collection = db.collection('blogs');
-    const { id } = req.params;
-    const updates = req.body;
+const updateBlog = async (req, res) => {
+    try {
+        const collection = db.collection('blogs');
+        const { id } = req.params;
+        const updates = req.body;
 
-    if (!ObjectId.isValid(id)) {
-        console.warn(`⚠️ Invalid blog ID format: ${id}`);
-        return res.status(400).send({message: `⚠️ Invalid blog ID format: ${id}`});
-    }
+        if (!ObjectId.isValid(id)) {
+            console.warn(`⚠️ Invalid blog ID format: ${id}`);
+            return res.status(400).send({ message: `⚠️ Invalid blog ID format: ${id}` });
+        }
 
-    delete updates._id;
+        delete updates._id;
 
-    if (Object.keys(updates).length === 0) {
-        console.warn('⚠️ No fields to update!');
-        return res.status(400).send({message: '⚠️ No fields to update!'});
-    }
+        if (Object.keys(updates).length === 0) {
+            console.warn('⚠️ No fields to update!');
+            return res.status(400).send({ message: '⚠️ No fields to update!' });
+        }
 
-    updates.updatedAt = new Date();
+        const existingBlog = await collection.findOne({ _id: new ObjectId(id) });
 
-    collection.updateOne({ _id: new ObjectId(id) }, { $set: updates })
-        .then(result => {
-            if (result.matchedCount === 0) {
-                console.warn(`⚠️ Blog not found: ${id}`);
-                return res.status(404).send({message: `⚠️ Blog not found: ${id}`});
-            } else {
-                console.log(`✅Successfully updated blog: ${id}`);
-                res.status(200).send({message: `✅Blog ${id} updated successfully!`});
+        if (!existingBlog) {
+            console.warn(`⚠️ Blog not found: ${id}`);
+            return res.status(404).send({ message: `⚠️ Blog not found: ${id}` });
+        }
+
+        if (updates.image && updates.image.startsWith('data:image')) {
+            if (!validateImageType(updates.image)) {
+                return res.status(400).send({ message: 'Invalid image format' });
             }
-        })
-        .catch(err => {
-            res.status(500).send('Error occurred while updating blog!');
-        })
+
+            const oldPublicId = existingBlog.imagePublicId;
+            const uploadResult = await replaceImageInCloudinary(oldPublicId, updates.image);
+
+            updates.image = uploadResult.url;
+            updates.imagePublicId = uploadResult.publicId;
+        }
+
+        updates.updatedAt = new Date();
+
+        const result = await collection.updateOne(
+            { _id: new ObjectId(id) }, 
+            { $set: updates }
+        );
+
+        console.log(`✅ Successfully updated blog: ${id}`);
+        res.status(200).send({ message: `✅ Blog ${id} updated successfully!` });
+    } catch (err) {
+        console.error('❌ Error updating blog:', err);
+        res.status(500).send({ message: 'Error occurred while updating blog!' });
+    }
 }
 
 const getBlogs = (req, res) => {

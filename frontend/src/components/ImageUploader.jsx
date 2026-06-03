@@ -30,7 +30,7 @@ function ImageUploader({ value, onChange, required = false }) {
         const convertedBlob = await heic2any({
           blob: file,
           toType: "image/jpeg",
-          quality: 0.9
+          quality: 1
         });
 
         // Handle array of blobs (heic2any can return array)
@@ -105,7 +105,7 @@ function ImageUploader({ value, onChange, required = false }) {
       />
 
       {isConverting ? (
-        <div className="w-full h-64 rounded-2xl border-2 border-dashed border-[#E5E7EB] bg-[#F9FAFB] flex items-center justify-center">
+        <div className="w-full aspect-[3/2] rounded-2xl border-2 border-dashed border-[#E5E7EB] bg-[#F9FAFB] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="w-10 h-10 border-4 border-[#E5E7EB] border-t-[#0A0A0A] rounded-full animate-spin"></div>
             <p className="text-sm text-[#0A0A0A] font-medium">Converting HEIC image...</p>
@@ -113,7 +113,7 @@ function ImageUploader({ value, onChange, required = false }) {
           </div>
         </div>
       ) : preview ? (
-        <div className="relative w-full h-64 rounded-2xl overflow-hidden border border-[#E5E7EB] bg-[#F9FAFB]">
+        <div className="relative w-full aspect-[3/2] rounded-2xl overflow-hidden border border-[#E5E7EB] bg-[#F9FAFB]">
           <img
             src={preview}
             alt="Preview"
@@ -134,7 +134,7 @@ function ImageUploader({ value, onChange, required = false }) {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full h-64 rounded-2xl border-2 border-dashed transition-all cursor-pointer ${
+          className={`w-full aspect-[3/2] rounded-2xl border-2 border-dashed transition-all cursor-pointer ${
             isDragging
               ? "border-[#0A0A0A] bg-[#F9FAFB]"
               : "border-[#E5E7EB] bg-white hover:bg-[#F9FAFB]"
